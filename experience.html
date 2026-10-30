@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 테마를 먼저 정해야 새로고침할 때 흰 화면이 번쩍이지 않음 -->
+  <script>
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem("theme"); } catch (e) {}
+      if (!theme) theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.classList.add("js");
+    })();
+  </script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Experience — Heeyeon Yang</title>
+</head>
+<body data-page="experience">
+  <header id="site-header"></header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="page-head">
+          <h1 class="page-title" data-i18n="experience.title"></h1>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container split">
+        <div><p class="eyebrow" data-i18n="section.experience"></p></div>
+        <ul id="all-experience"></ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container split">
+        <div><p class="eyebrow" data-i18n="section.education"></p></div>
+        <ul id="education"></ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container split">
+        <div><p class="eyebrow" data-i18n="section.skills"></p></div>
+        <div id="skills-certs"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container" id="resume"></div>
+    </section>
+  </main>
+
+  <script src="js/i18n.js" defer></script>
+  <script src="js/data/projects.js" defer></script>
+  <script src="js/data/experience.js" defer></script>
+  <script src="js/common.js" defer></script>
+  <script src="js/pages/experience.js" defer></script>
+</body>
+</html>
