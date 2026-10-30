@@ -39,10 +39,11 @@ const EDUCATION = [
   {
     org: { en: "Ewha Womans University", ko: "이화여자대학교" },
     role: {
-      en: "B.S. — Double major in Software Engineering",
-      ko: "학사 — 소프트웨어학 복수전공",
+      en: "B.S. in Content Convergence, B.E. in Software (Double Major)",
+      ko: "융합콘텐츠학사, 소프트웨어공학사 (복수전공)",
     },
-    period: "20XX – 20XX",
+    desc: { en: "GPA 4.15 / 4.5", ko: "학점 4.15 / 4.5" },
+    period: "2022.03 – 2026.02",
   },
 ];
 
@@ -55,15 +56,18 @@ const SKILLS = [
   { label: { en: "Language / DB", ko: "언어 / DB" }, items: ["Python", "MySQL"] },
 ];
 
+// 자격증. date는 취득 연월(YYYY.MM), icon은 발급 기관 로고
 const CERTS = [
   {
     name: "AWS Certified Solutions Architect – Associate",
-    issuer: "Amazon Web Services",
-    date: "2026", // TODO
+    issuer: "Amazon Web Services (AWS)",
+    date: "2026.10",
+    icon: "assets/icons/stack/aws.svg",
   },
   {
     name: { en: "Engineer Information Processing", ko: "정보처리기사" },
     issuer: { en: "HRD Korea", ko: "한국산업인력공단" },
-    date: "20XX",
+    date: "2026.06",
+    icon: "assets/icons/certs/hrdk.svg",
   },
 ];

@@ -2,6 +2,7 @@
 // HTML에서는 data-i18n="key"로 연결. 프로젝트/경험 데이터는 각 data 파일에서 {en, ko}로 관리
 
 const UI_TEXT = {
+  "nav.about": { en: "About me", ko: "소개" },
   "nav.projects": { en: "Projects", ko: "프로젝트" },
   "nav.experience": { en: "Experience", ko: "경험" },
 
@@ -12,20 +13,21 @@ const UI_TEXT = {
   },
   "banner.more": { en: "Details", ko: "자세히" },
 
-  "hero.greet": { en: "Hello, I'm", ko: "안녕하세요, 저는" },
-  "hero.name": { en: "Heeyeon Yang", ko: "양희연" },
-  "hero.title": { en: "Cloud & Infrastructure Engineer", ko: "Cloud & Infrastructure Engineer" },
-  "hero.cta": { en: "Projects", ko: "프로젝트" },
+  // 랜딩(hero) 문구는 index.html에 영어로 고정
 
+  "about.title": { en: "About me", ko: "소개" },
+  "about.placeholder": { en: "Introduction coming soon.", ko: "소개 글 작성 예정" },
   "section.projects": { en: "Projects", ko: "프로젝트" },
   "section.side": { en: "Side projects", ko: "사이드 프로젝트" },
-  "section.allProjects": { en: "All projects", ko: "전체 프로젝트" },
+  "section.allProjects": { en: "See all projects", ko: "전체 프로젝트 보기" },
+  "section.allSide": { en: "See all side projects", ko: "사이드 프로젝트 전체 보기" },
   "section.experience": { en: "Experience", ko: "경험" },
-  "section.experienceTitle": { en: "Hands-on experience", ko: "주요 경험" },
+  "section.experienceTitle": { en: "Experience", ko: "경험" },
   "section.allExperience": { en: "See all experience", ko: "전체 경험 보기" },
   "section.education": { en: "Education", ko: "학력" },
   "section.skills": { en: "Skills & Certifications", ko: "기술 및 자격증" },
-  "section.skillsTitle": { en: "Tools I work with", ko: "사용하는 기술" },
+  "section.skillsTitle": { en: "Skills", ko: "기술" },
+  "section.certs": { en: "Certifications", ko: "자격증" },
 
   "resume.title": { en: "Resume", ko: "이력서" },
   "resume.desc": { en: "Full resume in PDF.", ko: "전체 이력서를 PDF로 받을 수 있습니다." },
@@ -41,12 +43,24 @@ const UI_TEXT = {
   "filter.all": { en: "All", ko: "전체" },
   "filter.main": { en: "Main", ko: "메인" },
   "filter.side": { en: "Side", ko: "사이드" },
+  "filter.empty": { en: "No projects in this combination yet.", ko: "이 조건에 맞는 프로젝트가 아직 없습니다." },
+  "project.view": { en: "View details", ko: "자세히 보기" },
+  "fact.period": { en: "Period", ko: "기간" },
+  "fact.team": { en: "Team", ko: "인원" },
+  "fact.role": { en: "Role", ko: "역할" },
+  "project.back": { en: "All projects", ko: "전체 프로젝트" },
+  "project.writeup": { en: "Detailed write-up coming soon.", ko: "상세 내용 작성 예정" },
+  "project.notFound": { en: "Project not found.", ko: "프로젝트를 찾을 수 없습니다." },
+  "project.prev": { en: "Previous", ko: "이전" },
+  "project.next": { en: "Next", ko: "다음" },
+  "project.highlights": { en: "Highlights", ko: "주요 내용" },
   "kind.main": { en: "Main project", ko: "메인 프로젝트" },
   "kind.side": { en: "Side project", ko: "사이드 프로젝트" },
 
   "experience.title": { en: "Experience", ko: "경험" },
 
   "modal.close": { en: "Close", ko: "닫기" },
+  "modal.full": { en: "View full page", ko: "전체 보기" },
   "a11y.menu": { en: "Open menu", ko: "메뉴 열기" },
   "a11y.theme": { en: "Toggle dark mode", ko: "다크 모드 전환" },
   "a11y.lang": { en: "한국어로 보기", ko: "View in English" },

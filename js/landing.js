@@ -14,9 +14,10 @@
   const ICON_MAX = 112;
 
   // 정렬된 기술 스택 줄
-  const STACK_SIZE = 36; // 정렬 후 아이콘 크기(px), 모바일은 STACK_SIZE_MOBILE
-  const STACK_SIZE_MOBILE = 28;
-  const STACK_GAP = 10; // 아이콘 사이 간격
+  // 정렬 후 크기와 간격은 이어서 흐르는 띠(marquee.js, .mq-item)와 같아야 끊기지 않음
+  const STACK_SIZE = 44; // 정렬 후 아이콘 크기(px), 모바일은 STACK_SIZE_MOBILE
+  const STACK_SIZE_MOBILE = 34;
+  const STACK_GAP = 14; // 아이콘 사이 간격
   const STACK_MARGIN = 36; // 카드와 아이콘 줄 사이 간격
   const STACK_MAX_WIDTH = 960; // 아이콘 줄 최대 너비
 
@@ -53,14 +54,15 @@
   };
 
   // 타이밍 (ms)
-  const START_DELAY = 300;
-  const FALL_TIME = 800;
+  const START_DELAY = 150;
+  const FALL_TIME = 700;
   const RISE_AFTER = 1300; // 착지 후 카드가 올라오기까지
   const RISE_TIME = 700;
   const HOME_POSITION = 0.36; // 카드+아이콘 묶음의 세로 위치 (0.5 = 정가운데, 작을수록 위로)
-  const TIDY_AFTER = 300; // 카드가 올라온 뒤 아이콘 정렬까지
-  const TIDY_TIME = 900;
-  const TIDY_STAGGER = 35; // 아이콘마다 출발 시차
+  const TIDY_START = 1500; // 착지 후 아이콘 정렬 시작까지 (카드가 올라오는 도중에 시작)
+  const TIDY_TIME = 650;
+  const TIDY_STAGGER = 20; // 아이콘마다 출발 시차
+  const TIDY_EASE = "cubic-bezier(0.5, 0, 0.2, 1)"; // 천천히 떠오르지 않고 곧장 자리로
 
   // 텍스트 줄별 설정 (위에서부터 인사말, 이름, 직무)
   // lag:  떨어지는 동안 카드보다 뒤처지는 정도(px). 클수록 느리게 떨어지는 느낌
@@ -111,6 +113,7 @@
   let iconPx = 64;
   let walls = [];
   let phase = "idle";
+  let tidied = false; // 아이콘 정렬이 시작됐는지 (카드 움직임 phase와 따로)
   const icons = [];
 
   // 카드는 물리엔진 밖에서 직접 위치 계산
@@ -131,7 +134,7 @@
     s.v += s.vel;
   }
 
-  const rock = spring(0.09, 0.1); // 카드 좌우 흔들림(deg)
+  const rock = spring(0.12, 0.25); // 카드 좌우 흔들림(deg). 감쇠를 크게 해서 한 번 기울었다 바로 멈춤
 
   // 줄마다 위치(px)와 기울기(deg) 스프링
   const lines = Array.from(textEl.children).map((el, i) => ({
@@ -327,6 +330,9 @@
   function impact() {
     phase = "burst";
 
+    // 바닥에 닿는 순간 아주 잠깐 좌우로 기우뚱 (최대 약 1.3도, 0.4초 안에 멈춤)
+    rock.vel = (Math.random() < 0.5 ? -1 : 1) * 0.9;
+
 
     // 인사말 등장
     hero.classList.add("landed");
@@ -335,6 +341,7 @@
 
     burst();
     setTimeout(rise, RISE_AFTER);
+    setTimeout(tidy, TIDY_START);
   }
 
   /* ---------- 텍스트 박스 물리 ----------
@@ -467,7 +474,6 @@
       () => {
         phase = "done";
         hero.classList.add("settled");
-        setTimeout(tidy, TIDY_AFTER);
       },
       settleText
     );
@@ -476,8 +482,9 @@
   // 바닥에 흩어진 아이콘을 작게 줄여서 카드 아래 한 줄로 모음
   // 이때부터 물리엔진은 손 떼고 CSS transition으로 이동
   function tidy() {
+    if (tidied) return;
     if (drag) release();
-    phase = "stacked";
+    tidied = true;
     const layout = stackLayout();
     const order = stackItems(false).map((it) => it.name);
 
@@ -490,7 +497,7 @@
       el.getBoundingClientRect(); // 위 상태를 먼저 적용시킴
 
       const delay = Math.max(order.indexOf(name), 0) * TIDY_STAGGER; // 정렬 순서대로 출발
-      el.style.transition = `transform ${TIDY_TIME}ms cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, opacity 0.4s ease ${delay + TIDY_TIME * 0.4}ms`;
+      el.style.transition = `transform ${TIDY_TIME}ms ${TIDY_EASE} ${delay}ms, opacity 0.4s ease ${delay + TIDY_TIME * 0.4}ms`;
       applySlot(el, name, layout);
     });
     hero.classList.add("stacked");
@@ -531,7 +538,8 @@
     card.x = W / 2;
     card.y = homeY();
     icons.forEach(({ el }) => el.classList.add("live"));
-    phase = "stacked";
+    phase = "done";
+    tidied = true;
     placeStack();
     hero.classList.add("ready", "landed", "settled", "stacked");
   }
@@ -576,7 +584,7 @@
       l.el.style.transform = `translateY(${l.y.v}px) rotate(${l.rot.v}deg)`;
     });
 
-    if (phase === "stacked") return; // 정렬 후엔 CSS가 위치를 잡음
+    if (tidied) return; // 정렬 후엔 CSS가 위치를 잡음
     icons.forEach(({ body, el }) => {
       el.style.transform = `translate(${body.position.x - iconPx / 2}px, ${body.position.y - iconPx / 2}px) rotate(${body.angle}rad)`;
     });
@@ -604,7 +612,7 @@
 
   stage.addEventListener("pointerdown", (e) => {
     const el = e.target.closest(".stack-icon");
-    if (!el || phase === "stacked") return;
+    if (!el || tidied) return;
     const item = icons.find((i) => i.el === el);
     Sleeping.set(item.body, false); // 고정돼 있던 아이콘 깨우기
     const p = local(e);
@@ -643,8 +651,8 @@
     measure();
     buildWalls();
     card.x = W / 2;
-    if (phase === "done" || phase === "stacked") card.y = homeY();
-    if (phase === "stacked") {
+    if (phase === "done") card.y = homeY();
+    if (tidied) {
       placeStack();
       render();
       return;

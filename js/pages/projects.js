@@ -1,67 +1,69 @@
 // Projects 페이지
 
-const FILTER_MIN = 6; // 이 개수 이상이면 필터 노출
-let currentFilter = "all";
+const REAL = PROJECTS.filter((p) => !p.draft); // 임시 카드는 이 페이지에 안 보임
 
-function filterOptions() {
-  // 메인/사이드 + 데이터에 있는 카테고리 자동 수집
-  const categories = [...new Set(PROJECTS.map((p) => p.category).filter(Boolean))];
-  return [
-    { key: "all", label: t("filter.all") },
-    { key: "type:main", label: t("filter.main") },
-    { key: "type:side", label: t("filter.side") },
-    ...categories.map((c) => ({ key: `cat:${c}`, label: c })),
-  ];
-}
+// 필터는 두 줄: 종류(전체/메인/사이드) + 주제. 둘을 같이 적용
+// 메인의 "사이드 프로젝트 전체 보기"에서 오면 projects.html?type=side
+const typeParam = new URLSearchParams(location.search).get("type");
+let typeFilter = typeParam === "main" || typeParam === "side" ? typeParam : "all";
+let topicFilter = "all";
 
 function matches(p) {
-  if (currentFilter === "all") return true;
-  const [kind, value] = currentFilter.split(":");
-  return kind === "type" ? p.type === value : p.category === value;
+  return (typeFilter === "all" || p.type === typeFilter) && (topicFilter === "all" || p.topic === topicFilter);
 }
 
 function renderFilters() {
   const bar = document.getElementById("filter-bar");
-  if (PROJECTS.length < FILTER_MIN) {
-    bar.hidden = true;
-    return;
-  }
   bar.hidden = false;
-  bar.innerHTML = filterOptions()
-    .map(
-      (f) =>
-        `<button class="filter-btn" type="button" data-filter="${f.key}" aria-pressed="${f.key === currentFilter}">${f.label}</button>`
-    )
-    .join("");
+  const btn = (group, key, label, on) =>
+    `<button class="filter-btn" type="button" data-group="${group}" data-key="${key}" aria-pressed="${on}">${label}</button>`;
+
+  const types = [
+    ["all", t("filter.all")],
+    ["main", t("filter.main")],
+    ["side", t("filter.side")],
+  ].map(([k, label]) => btn("type", k, label, typeFilter === k));
+
+  const used = new Set(REAL.map((p) => p.topic));
+  const topics = Object.keys(TOPICS)
+    .filter((k) => used.has(k))
+    .map((k) => btn("topic", k, pick(TOPICS[k]), topicFilter === k));
+
+  bar.innerHTML = `
+    <div class="filter-group" role="group">${types.join("")}</div>
+    <span class="filter-divider" aria-hidden="true"></span>
+    <div class="filter-group" role="group">${topics.join("")}</div>
+  `;
 }
 
+// 왼쪽: 썸네일 + 기간/인원/역할 + 버튼(자세히 보기, GitHub 아이콘) / 오른쪽: 제목, 태그, 설명
 function detailHTML(p) {
   const points = pick(p.points) || [];
-  const links = [];
-  if (p.links && p.links.github) {
-    links.push(
-      `<a class="btn btn-outline" href="${p.links.github}" target="_blank" rel="noopener">${ICONS.github}<span>${t("projects.github")}</span></a>`
-    );
-  }
-  if (p.modal) {
-    links.push(`<button class="btn btn-outline" type="button" data-open-built><span>${t("projects.details")}</span>${ICONS.arrowRight}</button>`);
-  }
+  const github =
+    p.links && p.links.github
+      ? `<a class="btn btn-outline btn-icon" href="${p.links.github}" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">${ICONS.github}</a>`
+      : "";
 
   return `
     <article class="detail reveal" id="${p.id}">
-      ${thumbHTML(p.diagram, p.stack)}
+      <div class="detail-side">
+        ${thumbHTML(p.diagram, p.stack)}
+        <dl class="detail-facts">
+          <div><dt>${t("fact.period")}</dt><dd>${p.meta.period}</dd></div>
+          <div><dt>${t("fact.team")}</dt><dd>${pick(p.meta.team)}</dd></div>
+          <div><dt>${t("fact.role")}</dt><dd>${pick(p.meta.role)}</dd></div>
+        </dl>
+        <div class="detail-links">
+          <a class="btn btn-primary" href="${projectURL(p)}"><span>${t("project.view")}</span>${ICONS.arrowRight}</a>
+          ${github}
+        </div>
+      </div>
       <div>
         <p class="detail-kind">${t(p.type === "main" ? "kind.main" : "kind.side")}</p>
-        <h2>${pick(p.title)}</h2>
-        <div class="detail-meta">
-          <span>${p.meta.period}</span>
-          <span>${pick(p.meta.team)}</span>
-          <span>${pick(p.meta.role)}</span>
-        </div>
+        <h2><a class="detail-title-link" href="${projectURL(p)}">${pick(p.title)}</a></h2>
+        ${tagsHTML(p.tags)}
         <p class="detail-summary">${pick(p.summary)}</p>
         ${points.length ? `<ul class="detail-points">${points.map((x) => `<li>${x}</li>`).join("")}</ul>` : ""}
-        ${tagsHTML(p.tags)}
-        ${links.length ? `<div class="detail-links">${links.join("")}</div>` : ""}
       </div>
     </article>
   `;
@@ -69,8 +71,11 @@ function detailHTML(p) {
 
 function renderList() {
   // 메인 먼저, 그 다음 사이드
-  const sorted = [...PROJECTS].sort((a, b) => (a.type === b.type ? 0 : a.type === "main" ? -1 : 1));
-  document.getElementById("project-list").innerHTML = sorted.filter(matches).map(detailHTML).join("");
+  const sorted = [...REAL].sort((a, b) => (a.type === b.type ? 0 : a.type === "main" ? -1 : 1));
+  const list = sorted.filter(matches);
+  document.getElementById("project-list").innerHTML = list.length
+    ? list.map(detailHTML).join("")
+    : `<p class="empty-note">${t("filter.empty")}</p>`;
 }
 
 function renderPage() {
@@ -78,10 +83,19 @@ function renderPage() {
   renderList();
 }
 
+// 메인 카드에서 넘어왔을 때(projects.html#id): 그린 뒤에 해당 프로젝트로 다시 맞춤
+addEventListener("load", () => {
+  const el = location.hash && document.getElementById(location.hash.slice(1));
+  if (el) el.scrollIntoView({ behavior: "instant", block: "start" });
+});
+
 document.addEventListener("click", (e) => {
-  const btn = e.target.closest("[data-filter]");
+  const btn = e.target.closest("[data-group]");
   if (!btn) return;
-  currentFilter = btn.dataset.filter;
+  const { group, key } = btn.dataset;
+  if (group === "type") typeFilter = key;
+  // 주제는 다시 누르면 해제
+  else topicFilter = topicFilter === key ? "all" : key;
   renderPage();
   observeReveal();
 });

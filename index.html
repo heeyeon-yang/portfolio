@@ -29,7 +29,7 @@
     <!-- How I built 배너: 클릭하면 모달 -->
     <div class="built-banner">
       <button type="button" data-open-built>
-        <span class="pill" data-i18n="banner.pill"></span>
+        <span class="pill"><span class="live-dot" aria-hidden="true"></span><span data-i18n="banner.pill"></span></span>
         <span class="summary" data-i18n="banner.summary"></span>
         <span class="more"><span data-i18n="banner.more"></span> <span class="arrow">&rarr;</span></span>
       </button>
@@ -42,25 +42,35 @@
       <div class="hero-card">
         <!-- 줄마다 따로 움직임 (landing.js). 작은 인사말은 착지할 때 나타남 -->
         <div class="hero-text">
-          <p class="hero-greet" data-i18n="hero.greet"></p>
-          <h1 class="hero-name" data-i18n="hero.name"></h1>
-          <p class="hero-title" data-i18n="hero.title"></p>
+          <!-- 랜딩 문구는 언어 전환 없이 영어 고정 -->
+          <p class="hero-greet">Hello, I'm</p>
+          <h1 class="hero-name">Heeyeon Yang</h1>
+          <p class="hero-title">Cloud &amp; Infrastructure Engineer</p>
         </div>
-        <a class="btn btn-primary hero-cta" href="#projects">
-          <span data-i18n="hero.cta"></span>
-          <svg class="right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <a class="btn btn-primary btn-fill hero-cta" href="#projects">
+          <span class="cta-label">Projects</span>
+          <span class="cta-arrow" aria-hidden="true">
+            <svg class="right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
         </a>
       </div>
     </section>
 
     <section class="section" id="projects">
       <div class="container">
-        <p class="eyebrow" data-i18n="section.projects"></p>
+        <div class="section-head">
+          <h2 class="split-title" data-i18n="section.projects"></h2>
+          <a class="more-link" href="projects.html"><span data-i18n="section.allProjects"></span> &rarr;</a>
+        </div>
         <div class="project-grid" id="main-projects"></div>
 
-        <div class="side-block">
-          <p class="side-heading" data-i18n="section.side"></p>
-          <div class="side-list" id="side-projects"></div>
+        <!-- 아래 Experience, Skills와 같은 좌우 레이아웃 -->
+        <div class="side-block split">
+          <div><h2 class="split-title" data-i18n="section.side"></h2></div>
+          <div>
+            <div class="side-list" id="side-projects"></div>
+            <a class="more-link" href="projects.html?type=side"><span data-i18n="section.allSide"></span> &rarr;</a>
+          </div>
         </div>
       </div>
     </section>
@@ -68,7 +78,6 @@
     <section class="section" id="experience">
       <div class="container split">
         <div>
-          <p class="eyebrow" data-i18n="section.experience"></p>
           <h2 class="split-title" data-i18n="section.experienceTitle"></h2>
         </div>
         <div>
@@ -81,7 +90,6 @@
     <section class="section" id="skills">
       <div class="container split">
         <div>
-          <p class="eyebrow" data-i18n="section.skills"></p>
           <h2 class="split-title" data-i18n="section.skillsTitle"></h2>
         </div>
         <div id="skills-certs"></div>
@@ -97,8 +105,10 @@
   <script src="js/data/projects.js" defer></script>
   <script src="js/data/experience.js" defer></script>
   <script src="js/common.js" defer></script>
+  <script src="js/motion.js" defer></script>
   <script src="js/pages/home.js" defer></script>
   <script src="js/vendor/matter.min.js" defer></script>
   <script src="js/landing.js" defer></script>
+  <script src="js/marquee.js" defer></script>
 </body>
 </html>

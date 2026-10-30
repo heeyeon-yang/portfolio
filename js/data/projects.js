@@ -2,16 +2,24 @@
 // 새 프로젝트는 배열에 객체 하나 추가하면 메인/Projects 페이지 둘 다 반영됨
 //
 // type:     "main" | "side"
-// category: 필터용 (6개 이상일 때만 필터 노출)
+// topic:    주제 필터용 키 (아래 TOPICS에 이름 정의). 프로젝트당 하나
 // diagram:  assets/diagrams/ 안의 구조도 경로. 없으면 null → 스택 이름으로 대체 표시
 // thumb:    사이드 리스트용 작은 아이콘 (없으면 monogram 글자)
 // modal:    true면 클릭 시 상세 페이지 대신 How I built 모달을 엶
+
+// 주제 분류: 이 순서대로 필터 버튼이 나옴. 프로젝트가 없는 주제는 자동으로 숨김
+const TOPICS = {
+  reliability: { en: "High availability", ko: "고가용성" },
+  data: { en: "Data pipeline", ko: "데이터 파이프라인" },
+  serverless: { en: "Serverless", ko: "서버리스" },
+  hosting: { en: "Static hosting", ko: "정적 호스팅" },
+};
 
 const PROJECTS = [
   {
     id: "ha-failover",
     type: "main",
-    category: "kubernetes",
+    topic: "reliability",
     year: "2026",
     title: {
       en: "Multi-AZ Failover Validation on EKS",
@@ -47,7 +55,7 @@ const PROJECTS = [
   {
     id: "iot-streaming",
     type: "main",
-    category: "data",
+    topic: "data",
     year: "2026",
     title: {
       en: "IoT Sensor Streaming Platform",
@@ -77,10 +85,34 @@ const PROJECTS = [
     diagram: null,
     links: { github: "https://github.com/heeyeon-yang/iot-streaming-platform" },
   },
+  // 임시 카드 (draft: true): 메인 화면 자리만 채움. Projects 페이지에는 안 나옴
+  // 실제 프로젝트가 생기면 이 객체를 지우고 위와 같은 형식으로 추가
+  {
+    id: "draft-1",
+    type: "main",
+    draft: true,
+    year: "",
+    title: { en: "Coming soon", ko: "준비 중" },
+    summary: { en: "Project write-up in progress.", ko: "정리 중인 프로젝트입니다." },
+    tags: [],
+    stack: [],
+    diagram: null,
+  },
+  {
+    id: "draft-2",
+    type: "main",
+    draft: true,
+    year: "",
+    title: { en: "Coming soon", ko: "준비 중" },
+    summary: { en: "Project write-up in progress.", ko: "정리 중인 프로젝트입니다." },
+    tags: [],
+    stack: [],
+    diagram: null,
+  },
   {
     id: "quizlab",
     type: "side",
-    category: "serverless",
+    topic: "serverless",
     year: "2026",
     monogram: "λ",
     title: { en: "QuizLab", ko: "QuizLab" },
@@ -102,7 +134,7 @@ const PROJECTS = [
   {
     id: "this-site",
     type: "side",
-    category: "web",
+    topic: "hosting",
     year: "2026",
     monogram: "CF",
     modal: true,
@@ -126,6 +158,7 @@ const PROJECTS = [
 
 // How I built 모달 내용 (이 사이트 설명)
 const HOW_I_BUILT = {
+  projectId: "this-site", // "전체 보기"로 가는 상세 페이지
   title: { en: "How I built this site", ko: "이 사이트를 만든 방법" },
   stack: ["S3", "CloudFront", "Route 53", "ACM"],
   diagram: null, // TODO: assets/diagrams/this-site.svg
