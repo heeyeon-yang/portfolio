@@ -1075,7 +1075,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   background: #fff;
 }
 [data-theme="dark"] .project-figure img { filter: brightness(0.92); }
-.project-figure a { display: block; cursor: zoom-in; }
 .project-figure.is-narrow { max-width: 640px; margin-left: auto; margin-right: auto; }
 .project-body { margin-top: 56px; display: grid; gap: 48px; }
 .project-body h2 { font-size: 22px; letter-spacing: -0.015em; margin-bottom: 12px; }
@@ -1478,4 +1477,52 @@ html:has(.built-banner) { scroll-padding-top: calc(var(--header-h) + var(--banne
   .side-item:hover .side-text { transform: none; }
   .side-item:hover .side-title,
   .detail-main:hover h2 { color: inherit; }
+}
+
+/* ==========================================================
+   Diagram in project body + lightbox
+   ========================================================== */
+.project-body .project-figure { margin: 24px 0 0; }
+.figure-open {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+.lightbox {
+  width: min(1400px, calc(100vw - 32px), calc((100svh - 48px) * var(--ar, 1.74)));
+  max-width: none;
+  max-height: calc(100svh - 48px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+}
+.lightbox[open] { animation: modal-in 0.3s var(--ease); }
+.lightbox-body {
+  max-height: calc(100svh - 48px);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.lightbox-body img { display: block; width: 100%; height: auto; }
+.lightbox-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+@media (max-width: 720px) {
+  .lightbox { width: calc(100vw - 16px); }
+  .lightbox-body img { width: 880px; max-width: none; }
 }
