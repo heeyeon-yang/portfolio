@@ -918,9 +918,10 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.06);
   background: #fff;
+  background-clip: padding-box; /* keep the white fill from showing through the border */
   object-fit: contain;
 }
-[data-theme="dark"] .cert-icon { border-color: rgba(255, 255, 255, 0.08); }
+[data-theme="dark"] .cert-icon { border-color: rgba(255, 255, 255, 0.06); }
 .cert-date { align-self: flex-start; }
 .cert-text { flex: 1; min-width: 0; }
 .cert-name { font-weight: 550; }
@@ -1065,7 +1066,15 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   font-weight: 700;
 }
 .project-summary { margin-top: 20px; font-size: 18px; color: var(--text-2); }
-.project-figure { margin-top: 48px; }
+.project-figure { margin: 48px 0 0; }
+.project-figure img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: #fff;
+}
+[data-theme="dark"] .project-figure img { filter: brightness(0.92); }
 .project-body { margin-top: 56px; display: grid; gap: 48px; }
 .project-body h2 { font-size: 22px; letter-spacing: -0.015em; margin-bottom: 12px; }
 .project-body p { color: var(--text-2); }
@@ -1082,7 +1091,9 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 .pager-label { font-size: 14px; color: var(--text-3); }
 .pager-title { font-weight: 600; transition: color 0.2s; }
 .pager-link:hover .pager-title { color: var(--accent-text); }
-.detail-title-link:hover { color: var(--accent-text); }
+.detail-main { display: block; color: inherit; }
+.detail-main h2 { transition: color 0.2s; }
+.detail-main:hover h2 { color: var(--accent-text); }
 
 .thumb-wrap { position: relative; }
 .view-chip {
@@ -1110,6 +1121,26 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   pointer-events: none;
 }
 .view-chip svg { width: 15px; height: 15px; transition: transform 0.3s var(--ease); }
+.kind-chip {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 3;
+  height: 26px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  color: #55555a;
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+}
+[data-theme="dark"] .kind-chip { background: rgba(23, 23, 26, 0.5); border-color: rgba(255, 255, 255, 0.08); color: #a9a9ae; }
 .project-card:is(:hover, :focus-visible) .view-chip { opacity: 1; transform: none; }
 .project-card:hover .view-chip svg { transform: translateX(2px); }
 [data-theme="dark"] .view-chip { background: rgba(23, 23, 26, 0.5); border-color: rgba(255, 255, 255, 0.08); color: #f1f1f1; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4); }

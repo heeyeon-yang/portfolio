@@ -54,13 +54,13 @@ function detailHTML(p) {
           ${github}
         </div>
       </div>
-      <div>
+      <a class="detail-main" href="${projectURL(p)}">
         <p class="detail-kind">${t(p.type === "main" ? "kind.main" : "kind.side")}</p>
-        <h2><a class="detail-title-link" href="${projectURL(p)}">${pick(p.title)}</a></h2>
+        <h2>${pick(p.title)}</h2>
         ${tagsHTML(p.tags)}
         <p class="detail-summary">${pick(p.summary)}</p>
         ${points.length ? `<ul class="detail-points">${points.map((x) => `<li>${x}</li>`).join("")}</ul>` : ""}
-      </div>
+      </a>
     </article>
   `;
 }

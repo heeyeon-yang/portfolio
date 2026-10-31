@@ -41,6 +41,8 @@ const UI_TEXT = {
   "filter.side": { en: "Side", ko: "사이드" },
   "filter.empty": { en: "No projects in this combination yet.", ko: "이 조건에 맞는 프로젝트가 아직 없습니다." },
   "project.view": { en: "View details", ko: "자세히 보기" },
+  "chip.team": { en: "Team project", ko: "팀 프로젝트" },
+  "chip.personal": { en: "Personal project", ko: "개인 프로젝트" },
   "fact.period": { en: "Period", ko: "기간" },
   "fact.team": { en: "Team", ko: "인원" },
   "fact.role": { en: "Role", ko: "역할" },

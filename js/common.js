@@ -258,6 +258,7 @@ function projectCardHTML(p) {
     <a class="project-card reveal" href="${projectURL(p)}">
       <div class="thumb-wrap">
         ${thumbHTML(p.diagram, p.stack, p.flow, p.tint)}
+        <span class="kind-chip">${t(p.meta.team.en === "Personal" ? "chip.personal" : "chip.team")}</span>
         <span class="view-chip" aria-hidden="true">${t("project.view")}${ICONS.arrowRight}</span>
       </div>
       <div class="card-body">

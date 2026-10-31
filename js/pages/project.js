@@ -56,7 +56,7 @@ function renderPage() {
       ${links.length ? `<div class="detail-links">${links.join("")}</div>` : ""}
     </header>
 
-    <div class="project-figure">${thumbHTML(p.diagram, p.stack, p.flow, p.tint)}</div>
+    ${p.figure ? `<figure class="project-figure"><img src="${p.figure}" alt="${pick(p.title)} architecture"></figure>` : ""}
 
     <div class="project-body">
       ${points.length ? `<section><h2>${t("project.highlights")}</h2><ul class="detail-points">${points.map((x) => `<li>${x}</li>`).join("")}</ul></section>` : ""}
