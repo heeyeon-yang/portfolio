@@ -345,10 +345,19 @@ const revealObserver =
     ? new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("in");
-              revealObserver.unobserve(entry.target);
-            }
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            // Project cards reveal together as one set, with their icons and tags.
+            const group =
+              el.classList.contains("project-card") && el.parentElement
+                ? el.parentElement.querySelectorAll(":scope > .project-card.reveal")
+                : [el];
+            group.forEach((item) => {
+              [item, ...item.querySelectorAll(".reveal-flow")].forEach((x) => {
+                x.classList.add("in");
+                revealObserver.unobserve(x);
+              });
+            });
           });
         },
         { rootMargin: "0px 0px -8% 0px" }

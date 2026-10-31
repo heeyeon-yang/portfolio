@@ -1075,6 +1075,8 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   background: #fff;
 }
 [data-theme="dark"] .project-figure img { filter: brightness(0.92); }
+.project-figure a { display: block; cursor: zoom-in; }
+.project-figure.is-narrow { max-width: 640px; margin-left: auto; margin-right: auto; }
 .project-body { margin-top: 56px; display: grid; gap: 48px; }
 .project-body h2 { font-size: 22px; letter-spacing: -0.015em; margin-bottom: 12px; }
 .project-body p { color: var(--text-2); }
@@ -1449,4 +1451,31 @@ html:has(.built-banner) { scroll-padding-top: calc(var(--header-h) + var(--banne
   .flow-zone-label { top: 4px; left: 6px; }
   .flow-group { gap: 6px; }
   .flow-link { margin: 0 4px; }
+}
+
+/* ==========================================================
+   Project cards: one reveal, no inner pop-ins
+   ========================================================== */
+.project-card.reveal { --d: 0ms !important; }
+:is(.project-card, .detail) :is(.flow-node, .flow-group, .flow-link) {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+.fx-stagger :is(.project-card, .detail).reveal .tag {
+  opacity: 1;
+  transform: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+/* Touch screens: no sticky hover effects */
+@media (hover: none) {
+  .project-card:hover .thumb img,
+  .project-card:hover .thumb-placeholder { transform: none; }
+  .project-card:hover .flow.in .flow-dot,
+  .project-card:hover .flow.in .flow-lead .flow-dot { animation: none; }
+  .side-item:hover .side-thumb,
+  .side-item:hover .side-text { transform: none; }
+  .side-item:hover .side-title,
+  .detail-main:hover h2 { color: inherit; }
 }
