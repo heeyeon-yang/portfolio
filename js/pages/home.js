@@ -1,4 +1,3 @@
-// 메인 페이지
 
 function renderPage() {
   const main = PROJECTS.filter((p) => p.type === "main");

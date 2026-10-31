@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- 테마를 먼저 정해야 새로고침할 때 흰 화면이 번쩍이지 않음 -->
   <script>
     (function () {
       var theme;
@@ -26,7 +25,6 @@
   <header id="site-header"></header>
 
   <main>
-    <!-- How I built 배너: 클릭하면 모달 -->
     <div class="built-banner">
       <button type="button" data-open-built>
         <span class="pill"><span class="live-dot" aria-hidden="true"></span><span data-i18n="banner.pill"></span></span>
@@ -36,13 +34,10 @@
     </div>
 
     <section class="hero">
-      <!-- 아이콘은 landing.js가 여기에 넣음 -->
       <div id="hero-stage" aria-hidden="true"></div>
 
       <div class="hero-card">
-        <!-- 줄마다 따로 움직임 (landing.js). 작은 인사말은 착지할 때 나타남 -->
         <div class="hero-text">
-          <!-- 랜딩 문구는 언어 전환 없이 영어 고정 -->
           <p class="hero-greet">Hello, I'm</p>
           <h1 class="hero-name">Heeyeon Yang</h1>
           <p class="hero-title">Cloud &amp; Infrastructure Engineer</p>
@@ -64,7 +59,6 @@
         </div>
         <div class="project-grid" id="main-projects"></div>
 
-        <!-- 아래 Experience, Skills와 같은 좌우 레이아웃 -->
         <div class="side-block split">
           <div><h2 class="split-title" data-i18n="section.side"></h2></div>
           <div>

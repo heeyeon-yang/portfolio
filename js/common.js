@@ -1,13 +1,11 @@
-// 모든 페이지 공통: 헤더, 테마, 언어, 모달, 스크롤 등장 효과, 공용 렌더 함수
 
 const LINKS = {
   github: "https://github.com/heeyeon-yang",
   linkedin: "https://www.linkedin.com/in/heeyeon-yang",
-  resume: "assets/resume.pdf",
+  resume: "assets/Resume_Heeyeon_Yang.pdf",
 };
 
 const ICONS = {
-  // 공식 브랜드 로고 (Simple Icons)
   github:
     '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>',
   linkedin:
@@ -60,13 +58,11 @@ function renderHeader() {
         </div>
         <span class="header-divider" aria-hidden="true"></span>
         <div class="header-group">
-          <!-- 언어: ENG | KOR 두 칸. 지금 언어에 표시가 있고 누르면 반대 칸으로 미끄러져 감 -->
           <button class="lang-switch" type="button" data-i18n-label="a11y.lang">
             <span class="seg-indicator" aria-hidden="true"></span>
             <span class="seg" data-lang="en">ENG</span>
             <span class="seg" data-lang="ko">KOR</span>
           </button>
-          <!-- 테마: 토글. 동그라미가 해(라이트) → 초승달(다크)로 바뀌며 이동 -->
           <button class="theme-switch" type="button" role="switch" data-i18n-label="a11y.theme">
             <span class="knob" aria-hidden="true"></span>
           </button>
@@ -75,7 +71,6 @@ function renderHeader() {
     </div>
   `;
 
-  // 모바일 메뉴는 헤더 바로 뒤에 붙임
   const mobile = document.createElement("nav");
   mobile.className = "mobile-nav";
   mobile.id = "mobile-nav";
@@ -94,7 +89,6 @@ function renderHeader() {
     menuBtn.setAttribute("aria-expanded", open);
     menuBtn.innerHTML = open ? ICONS.close : ICONS.menu;
   });
-  // 메뉴 링크 누르면 닫기 (같은 페이지 앵커일 때 대비)
   mobile.addEventListener("click", (e) => {
     if (e.target.tagName === "A") {
       mobile.classList.remove("open");
@@ -117,11 +111,9 @@ function renderHeader() {
   updateLangLabel();
   document.addEventListener("langchange", updateLangLabel);
   addEventListener("resize", updateLangLabel);
-  // 폰트가 늦게 오면 글자 폭이 바뀌므로 한 번 더 맞춤
   if (document.fonts) document.fonts.ready.then(updateLangLabel);
 }
 
-// 지금 언어 칸에 표시를 옮김 (표시 위치와 폭은 그 칸 크기에 맞춤)
 function updateLangLabel() {
   const sw = document.querySelector(".lang-switch");
   if (!sw) return;
@@ -137,7 +129,6 @@ function updateLangLabel() {
 }
 
 /* ---------- Theme ---------- */
-// 초기값은 <head>의 인라인 스크립트에서 이미 세팅됨 (깜빡임 방지)
 
 function toggleTheme() {
   const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
@@ -156,7 +147,6 @@ function ensureModal() {
   modal.className = "modal";
   document.body.appendChild(modal);
 
-  // 바깥(backdrop) 클릭하면 닫기
   modal.addEventListener("click", (e) => {
     if (e.target === modal) modal.close();
   });
@@ -194,29 +184,65 @@ function openBuiltModal() {
   ensureModal().showModal();
 }
 
-/* ---------- 공용 렌더 조각 ---------- */
-
-// 구조도 있으면 이미지, 없으면 스택 이름 칩
-function thumbHTML(diagram, stack = []) {
+function thumbHTML(diagram, stack = [], flow = [], tint = "") {
   if (diagram) {
     return `<div class="thumb"><img src="${diagram}" alt="" loading="lazy"></div>`;
   }
-  return `<div class="thumb"><div class="thumb-placeholder">${stack
-    .map((s) => `<span>${s}</span>`)
-    .join("")}</div></div>`;
+  const style = tint ? ` style="--tint:${tint}"` : "";
+  return `<div class="thumb${tint ? " tinted" : ""}"${style}><div class="thumb-placeholder">${flowHTML(flow)}</div></div>`;
+}
+
+const FLOW_LABELS = {
+  route53: "Route 53", elb: "ALB", eks: "EKS", rds: "RDS", kinesis: "Kinesis",
+  dynamodb: "DynamoDB", s3: "S3", lambda: "Lambda", sqs: "SQS", bedrock: "Bedrock", slack: "Slack",
+};
+
+// A step is "eks", or { icon: "lambda", label: "Worker" }, or a zone group:
+// { zones: ["AZ a", "AZ c"], steps: ["eks", "rds"] }
+function flowHTML(flow = []) {
+  if (!flow.length) return "";
+  let i = 0;
+  const node = (step) => {
+    const icon = typeof step === "string" ? step : step.icon;
+    const label = (typeof step === "object" && step.label) || FLOW_LABELS[icon] || icon;
+    return `<span class="flow-node" style="--i:${i++}"><img src="assets/icons/stack/${icon}.svg" alt=""><span class="flow-cap">${label}</span></span>`;
+  };
+  const link = () => `<span class="flow-link" style="--i:${i}"></span>`;
+  const row = (steps) => steps.map((s, k) => (k ? link() : "") + node(s)).join("");
+  const dot = '<span class="flow-dot"></span>';
+  const parts = flow.map((step, k) => {
+    const lead = k ? link() : "";
+    if (step && step.zones) {
+      const start = i;
+      const zones = step.zones
+        .map((name) => {
+          i = start;
+          return `<div class="flow-zone"><span class="flow-zone-label">${name}</span><div class="flow-row">${row(step.steps)}</div></div>`;
+        })
+        .join("");
+      return { group: true, lead, html: `<div class="flow-group" style="--i:${start}">${zones}</div>` };
+    }
+    return { html: lead + node(step) };
+  });
+  const g = parts.findIndex((p) => p.group);
+  if (g === -1) {
+    return `<div class="flow reveal-flow" aria-hidden="true">${dot}${parts.map((p) => p.html).join("")}</div>`;
+  }
+  // Grouped flow: the dot runs up to the zone box and stops there
+  const before = parts.slice(0, g).map((p) => p.html).join("") + parts[g].lead;
+  const after = parts.slice(g).map((p) => p.html).join("");
+  return `<div class="flow reveal-flow is-grouped" aria-hidden="true"><div class="flow-lead">${dot}${before}</div>${after}</div>`;
 }
 
 function tagsHTML(tags) {
   return `<div class="tags">${tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}</div>`;
 }
 
-// 프로젝트 상세 페이지 주소 (템플릿 하나: project.html?id=...)
 function projectURL(p) {
   return `project.html?id=${encodeURIComponent(p.id)}`;
 }
 
 function projectCardHTML(p) {
-  // 임시 카드: 링크 없이 자리만
   if (p.draft) {
     return `
       <div class="project-card is-draft reveal" aria-hidden="true">
@@ -231,7 +257,7 @@ function projectCardHTML(p) {
   return `
     <a class="project-card reveal" href="${projectURL(p)}">
       <div class="thumb-wrap">
-        ${thumbHTML(p.diagram, p.stack)}
+        ${thumbHTML(p.diagram, p.stack, p.flow, p.tint)}
         <span class="view-chip" aria-hidden="true">${t("project.view")}${ICONS.arrowRight}</span>
       </div>
       <div class="card-body">
@@ -244,7 +270,7 @@ function projectCardHTML(p) {
 }
 
 function sideItemHTML(p) {
-  const thumb = p.thumb ? `<img src="${p.thumb}" alt="">` : p.monogram || pick(p.title).slice(0, 2);
+  const thumb = p.thumb ? `<img src="${p.thumb}" alt=""${p.thumbFill ? ' class="fill"' : ""}>` : p.monogram || pick(p.title).slice(0, 2);
   const inner = `
     <span class="side-thumb">${thumb}</span>
     <span class="side-text">
@@ -261,10 +287,10 @@ function expItemHTML(e) {
     <li class="exp-item reveal">
       <div class="exp-top">
         <div>
-          <div class="exp-org">${pick(e.org)}</div>
-          <div class="exp-role">${pick(e.role)}</div>
+          <div class="exp-org">${pick(e.roleFirst ? e.role : e.org)}</div>
+          <div class="exp-role">${pick(e.roleFirst ? e.org : e.role)}</div>
         </div>
-        <span class="exp-period">${e.period}</span>
+        <span class="exp-period">${pick(e.period)}</span>
       </div>
       ${e.desc ? `<p class="exp-desc">${pick(e.desc)}</p>` : ""}
     </li>
@@ -328,9 +354,8 @@ const revealObserver =
       )
     : null;
 
-// 렌더할 때마다 새로 생긴 .reveal만 다시 등록
 function observeReveal(root = document) {
-  root.querySelectorAll(".reveal:not(.in)").forEach((el) => {
+  root.querySelectorAll(".reveal:not(.in), .reveal-flow:not(.in)").forEach((el) => {
     if (revealObserver) revealObserver.observe(el);
     else el.classList.add("in");
   });
@@ -342,7 +367,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.documentElement.lang = getLang();
   renderHeader();
 
-  // data-open-built 붙은 건 어디서든 모달 열기 (동적으로 그린 요소 포함)
   document.addEventListener("click", (e) => {
     if (e.target.closest("[data-open-built]")) openBuiltModal();
   });
@@ -352,15 +376,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (modal && modal.open) renderModal();
   });
 
-  // 페이지별 스크립트가 renderPage를 정의해 둠
   if (typeof renderPage === "function") renderPage();
   applyI18n();
   observeReveal();
 
-  // 언어 바꿀 땐 다시 그리되, 등장 애니메이션은 생략
   document.addEventListener("langchange", () => {
     if (typeof renderPage === "function") renderPage();
     applyI18n();
-    document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
+    document.querySelectorAll(".reveal, .reveal-flow").forEach((el) => el.classList.add("in"));
   });
 });

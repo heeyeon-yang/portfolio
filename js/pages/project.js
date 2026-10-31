@@ -1,11 +1,6 @@
-// 프로젝트 상세 페이지 (project.html?id=프로젝트id)
-// 지금은 기본 틀만. 본문은 projects.js 데이터에 sections를 넣으면 그대로 나옴
-//   sections: [{ heading: {en, ko}, body: {en, ko} }, ...]
-
 const projectId = new URLSearchParams(location.search).get("id");
 const LIST = PROJECTS.filter((p) => !p.draft);
 
-// "전체 프로젝트"로 돌아갈 때: 이 사이트 안에서 왔으면 뒤로 가기(보던 스크롤 위치 그대로)
 document.addEventListener("click", (e) => {
   const back = e.target.closest("[data-back]");
   if (!back) return;
@@ -61,7 +56,7 @@ function renderPage() {
       ${links.length ? `<div class="detail-links">${links.join("")}</div>` : ""}
     </header>
 
-    <div class="project-figure">${thumbHTML(p.diagram, p.stack)}</div>
+    <div class="project-figure">${thumbHTML(p.diagram, p.stack, p.flow, p.tint)}</div>
 
     <div class="project-body">
       ${points.length ? `<section><h2>${t("project.highlights")}</h2><ul class="detail-points">${points.map((x) => `<li>${x}</li>`).join("")}</ul></section>` : ""}

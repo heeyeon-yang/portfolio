@@ -1,5 +1,3 @@
-// UI 문구 (en / ko)
-// HTML에서는 data-i18n="key"로 연결. 프로젝트/경험 데이터는 각 data 파일에서 {en, ko}로 관리
 
 const UI_TEXT = {
   "nav.about": { en: "About me", ko: "소개" },
@@ -12,8 +10,6 @@ const UI_TEXT = {
     ko: "S3 정적 호스팅 + CloudFront로 배포한 사이트입니다.",
   },
   "banner.more": { en: "Details", ko: "자세히" },
-
-  // 랜딩(hero) 문구는 index.html에 영어로 고정
 
   "about.title": { en: "About me", ko: "소개" },
   "about.placeholder": { en: "Introduction coming soon.", ko: "소개 글 작성 예정" },
@@ -73,14 +69,13 @@ function getLang() {
     const saved = localStorage.getItem(LANG_KEY);
     if (saved === "en" || saved === "ko") return saved;
   } catch (e) {}
-  return "en"; // 기본은 영어
+  return "en";
 }
 
 function setLang(lang) {
   try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
   document.documentElement.lang = lang;
   applyI18n();
-  // 페이지별 렌더 함수들이 이 이벤트를 듣고 다시 그림
   document.dispatchEvent(new CustomEvent("langchange", { detail: lang }));
 }
 
@@ -90,7 +85,6 @@ function t(key) {
   return entry[getLang()] ?? entry.en;
 }
 
-// {en, ko} 객체나 문자열 둘 다 받음
 function pick(value) {
   if (value == null) return "";
   if (typeof value === "string") return value;

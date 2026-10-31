@@ -1,6 +1,5 @@
 /* ==========================================================
    Tokens
-   색은 여기서만 바꾼다. 다크 모드는 [data-theme="dark"]에서 덮어씀
    ========================================================== */
 :root {
   --bg: #ffffff;
@@ -11,18 +10,18 @@
   --text-2: #55555a;
   --text-3: #8c8c91;
   --line: #e7e7e5;
-  --accent: #0ab68b; /* 채우는 색 (버튼, 진행 바, 십자 강조) */
-  --accent-text: #07855f; /* 작은 글씨용. --accent는 흰 바탕 글씨로 쓰기엔 대비가 낮음 */
-  --on-accent: #0d0d0e; /* --accent 위 글씨 */
+  --accent: #0ab68b;
+  --accent-text: #07855f;
+  --on-accent: #0d0d0e;
   --accent-soft: rgba(10, 182, 139, 0.1);
-  --point: #e66386; /* 배지, 점 포인트용 (아직 안 씀) */
+  --point: #e66386;
   --header-bg: rgba(255, 255, 255, 0.78);
   --banner-bg: rgba(255, 255, 255, 0.55);
   --dot: rgba(17, 17, 17, 0.08);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
 
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --display: "Inter Tight", var(--font); /* 랜딩 이름 줄에만 사용 */
+  --display: "Inter Tight", var(--font);
 
   --header-h: 60px;
   --banner-h: 40px;
@@ -67,7 +66,8 @@ body {
   font-family: var(--font);
   font-size: 17px;
   line-height: 1.65;
-  word-break: keep-all; /* 한국어 줄바꿈을 단어 단위로 */
+  letter-spacing: 0.006em;
+  word-break: keep-all;
   overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.25s, color 0.25s;
@@ -114,7 +114,6 @@ main { padding-top: var(--header-h); }
 .header-right { gap: 4px; }
 
 .logo { font-weight: 650; letter-spacing: -0.01em; white-space: nowrap; }
-/* 좁은 화면: GitHub, LinkedIn은 헤더에서 빼고 메뉴(≡) 안으로 */
 .mobile-only-link { display: none; }
 @media (max-width: 520px) {
   .header-right > .header-group:first-child,
@@ -144,15 +143,10 @@ main { padding-top: var(--header-h); }
 .icon-btn svg { width: 18px; height: 18px; transition: transform 0.4s var(--ease); }
 .icon-btn:not(.theme-btn):hover svg { transform: translateY(-1px) scale(1.08); }
 
-/* ----------------------------------------------------------
-   헤더 오른쪽: GitHub, LinkedIn | 언어 스위치, 테마 토글
-   ---------------------------------------------------------- */
 .header-group { display: flex; align-items: center; gap: 4px; }
 .header-group + .header-divider + .header-group { gap: 10px; }
 .header-divider { width: 1px; height: 16px; background: var(--line); opacity: 0.6; margin: 0 12px; }
 
-/* GitHub, LinkedIn: 평소엔 아이콘만, hover하면 옆으로 늘어나며 이름이 나오고
-   아래부터 브랜드 색이 반투명하게 차오름 + 같은 색 테두리 */
 .hbtn {
   position: relative;
   display: inline-flex;
@@ -196,7 +190,6 @@ main { padding-top: var(--header-h); }
 [data-theme="dark"] .hbtn[data-tone="github"] { --tone: rgba(255, 255, 255, 0.12); --tone-line: rgba(255, 255, 255, 0.12); --tone-on: #fff; }
 [data-theme="dark"] .hbtn[data-tone="linkedin"] { --tone: rgba(10, 102, 194, 0.3); --tone-line: rgba(56, 145, 235, 0.18); --tone-on: #fff; }
 
-/* 언어 스위치: 평소엔 회색, hover하면 표시와 글씨, 테두리가 초록으로 */
 .lang-switch {
   position: relative;
   display: inline-flex;
@@ -236,7 +229,6 @@ main { padding-top: var(--header-h); }
 [data-theme="dark"] .seg-indicator { background: #2a2a2f; box-shadow: none; }
 .lang-switch:is(:hover, :focus-visible) .seg-indicator { background: var(--accent-soft); box-shadow: none; }
 
-/* 테마 토글: 라이트는 노란 해, 다크는 파란 초승달 */
 .theme-switch {
   --track: hsl(45, 90%, 88%);
   --knob: hsl(40, 95%, 55%);
@@ -255,7 +247,6 @@ main { padding-top: var(--header-h); }
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  /* 해와 달 모두 안쪽 그림자로 그림 → 색과 모양이 자연스럽게 바뀜 */
   box-shadow: inset 0 0 0 9px var(--knob);
   transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
@@ -263,7 +254,6 @@ main { padding-top: var(--header-h); }
 .theme-switch:hover .knob { transform: scale(1.08); }
 
 [data-theme="dark"] .theme-switch { --track: hsl(215, 45%, 18%); --knob: hsl(212, 95%, 74%); }
-/* 그림자를 한쪽으로 밀면 초승달 */
 [data-theme="dark"] .theme-switch .knob {
   transform: translateX(20px);
   box-shadow: inset 5px -4px 0 0 var(--knob);
@@ -309,10 +299,8 @@ main { padding-top: var(--header-h); }
 }
 
 /* ==========================================================
-   How I built banner (메인 상단)
+   How I built banner
    ========================================================== */
-/* 맨 위에선 56px로 두껍게(아래 여백을 음수로 줘서 레이아웃 흐름은 그대로 40px)
-   스크롤하면(html.scrolled) 원래 40px */
 .built-banner {
   --banner-tall: 56px;
   position: sticky;
@@ -358,9 +346,6 @@ main { padding-top: var(--header-h); }
 .built-banner .pill { transition: font-size 0.3s var(--ease), padding 0.3s var(--ease); font-size: 13px; padding: 3px 14px; }
 html.scrolled .built-banner { height: var(--banner-h); margin-bottom: 0; }
 
-/* 눈에 띄게, 과하지 않게
-   1) 라벨 앞 초록 점에서 은은한 물결이 3초마다 퍼짐 ("지금 AWS에서 돌아가는 중" 느낌)
-   2) hover하면 띠 전체가 연한 초록으로 물들고 Details가 초록, 화살표가 밀림 */
 .built-banner .pill { display: inline-flex; align-items: center; gap: 8px; }
 .live-dot {
   position: relative;
@@ -388,7 +373,6 @@ html.scrolled .built-banner { height: var(--banner-h); margin-bottom: 0; }
 @media (prefers-reduced-motion: reduce) {
   .live-dot::after { animation: none; }
 }
-/* 띠의 음수 아래 여백이 랜딩의 음수 위 여백과 합쳐져(마진 상쇄) 랜딩이 밀리지 않게, main을 flex로 */
 main:has(> .built-banner) { display: flex; flex-direction: column; }
 html.scrolled .built-banner button { font-size: 13px; }
 html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
@@ -398,10 +382,8 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 }
 
 /* ==========================================================
-   Hero / 랜딩 애니메이션
-   카드와 아이콘 위치는 landing.js가 transform으로 계속 갱신함
+   Hero
    ========================================================== */
-/* 헤더와 배너 뒤까지 깔아서, 아이콘이 위로 튈 때 블러 너머로 비치게 함 */
 .hero {
   position: relative;
   z-index: 0;
@@ -422,12 +404,9 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   bottom: 0;
   transform: translateX(-50%);
   z-index: 2;
-  /* 큰 화면에서는 화면에 맞춰 커짐 (560px ~ 840px) */
   width: min(calc(100% - 40px), clamp(560px, 46vw, 840px));
-  /* 아래쪽은 버튼 자리까지 포함 (버튼은 absolute라 텍스트 흐름과 별개) */
   padding: clamp(72px, 5.5vw, 104px) 40px clamp(136px, 10vw, 184px);
   border-radius: 28px;
-  /* 반투명 + 블러: 카드 뒤를 지나가는 아이콘이 흐리게 비침 (Figma: #EDEDED 64%) */
   background: var(--card-bg);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
@@ -435,11 +414,8 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   transform-origin: 50% 100%;
 }
 
-
-/* JS가 켜져 있으면 위치는 스크립트가 잡음. 준비 전엔 숨김 */
 .js .hero-card { left: 0; top: 0; bottom: auto; transform: none; visibility: hidden; }
 .js .hero.ready .hero-card { visibility: visible; }
-/* 아이콘이 카드 뒤를 지나갈 땐 강한 블러, 다 정렬된 뒤엔 약하게 */
 .hero-card { transition: backdrop-filter 0.8s var(--ease), -webkit-backdrop-filter 0.8s var(--ease); }
 .hero.stacked .hero-card { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
 
@@ -472,8 +448,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   color: var(--text-2);
 }
 
-/* 버튼은 텍스트와 따로 카드 하단에 고정. 텍스트가 카드 바닥까지 떨어질 수 있게 */
-/* 가운데 정렬은 transform 대신 margin으로. hover 때 transform이 바뀌어도 위치가 안 튐 */
 .hero-cta {
   position: absolute;
   left: 0;
@@ -483,7 +457,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   bottom: clamp(56px, 4.2vw, 80px);
 }
 
-/* 버튼은 카드가 제자리로 올라온 뒤에 나타남. 자리는 미리 잡아둬서 카드 크기는 그대로 */
 .js .hero-cta {
   opacity: 0;
   transform: translateY(10px);
@@ -492,8 +465,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 .js .hero.settled .hero-cta { opacity: 1; transform: none; }
 .js .hero.settled .hero-cta:hover { transform: translateY(-1px); }
 
-
-/* 애니메이션 도는 동안엔 버튼이 눌리지 않게 */
 .js .hero:not(.settled) .hero-card { pointer-events: none; }
 
 .stack-icon {
@@ -514,13 +485,10 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 .stack-icon.dragging { cursor: grabbing; }
 .stack-icon img { width: 100%; height: 100%; pointer-events: none; }
 
-/* 정렬된 뒤: 드래그 대신 마우스 올리면 살짝 커짐 (이름은 title 툴팁) */
 .hero.stacked .stack-icon { cursor: default; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); }
 .hero.stacked .stack-icon img { transition: transform 0.25s var(--ease); }
 .hero.stacked .stack-icon:hover img { transform: scale(1.12); }
 
-/* 정렬이 끝나면 아이콘 줄 → 무한으로 흐르는 띠 (js/marquee.js)
-   정렬된 아이콘은 투명하게 숨기고 같은 자리에 조금 더 큰 아이콘 띠를 띄움 */
 .stack-marquee {
   position: absolute;
   left: 50%;
@@ -531,12 +499,10 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   transform: translate(-50%, -50%);
   opacity: 0;
   transition: opacity 0.2s ease;
-  /* 양 끝은 흐리게 사라짐 */
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
 .hero.marquee-on .stack-marquee { opacity: 1; }
-/* 띠가 다 보인 다음(.marquee-run)에 아래 아이콘을 숨기고 흐르기 시작 */
 .hero.marquee-run .stack-icon {
   opacity: 0 !important;
   pointer-events: none !important;
@@ -549,7 +515,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   animation-play-state: paused;
 }
 .hero.marquee-run .mq-track { animation-play-state: running; }
-/* 간격은 gap 대신 오른쪽 여백으로 (두 벌을 이어 붙일 때 이음새 간격이 같아야 해서) */
 .mq-item {
   width: var(--mq-size, 44px);
   height: var(--mq-size, 44px);
@@ -566,7 +531,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 @keyframes marquee-scroll {
   to { transform: translateX(-50%); }
 }
-
 
 @media (max-width: 600px) {
   .hero-card { padding: 52px 24px 112px; border-radius: 22px; }
@@ -598,7 +562,7 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
    Sections
    ========================================================== */
 .section { padding: 136px 0 0; }
-#projects { padding-top: 32px; } /* 랜딩 바로 아래라 간격을 줄임 */
+#projects { padding-top: 32px; }
 .about-placeholder { color: var(--text-3); margin-top: 16px; }
 .section:last-of-type { padding-bottom: 120px; }
 
@@ -629,7 +593,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 .page-intro { margin-top: 16px; color: var(--text-2); max-width: 600px; font-size: 18px; }
 .page-head { padding-top: 72px; }
 
-/* 왼쪽 제목 + 오른쪽 내용 (레퍼런스의 Experience 레이아웃) */
 .split {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
@@ -644,8 +607,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 @media (max-width: 860px) {
   .split { grid-template-columns: 1fr; gap: 24px; }
 }
-/* 섹션 전체 폭 제목 (메인 Projects) */
-/* 제목 + 오른쪽 끝 "전체 보기" */
 .section-head {
   display: flex;
   align-items: baseline;
@@ -655,7 +616,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 }
 .section-head .more-link { margin-top: 0; flex-shrink: 0; }
 
-/* 사이드 프로젝트는 Projects 아래 소제목: 크기와 간격을 한 단계 낮춤 */
 .side-block { margin-top: 88px; }
 .side-block .split-title { font-size: clamp(20px, 2vw, 24px); font-weight: 650; letter-spacing: -0.015em; }
 
@@ -675,6 +635,7 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 
 .thumb {
   position: relative;
+  container-type: inline-size;
   aspect-ratio: 16 / 10;
   border-radius: var(--radius);
   background: var(--bg-subtle);
@@ -689,7 +650,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   transition: transform 0.5s var(--ease);
 }
 
-/* 구조도 이미지 없을 때: 스택 이름을 도면처럼 늘어놓음 */
 .thumb-placeholder {
   position: absolute;
   inset: 0;
@@ -703,22 +663,125 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   background-size: 18px 18px;
   transition: transform 0.5s var(--ease);
 }
-.thumb-placeholder span {
-  font-size: 13px;
+/* Service flow inside the placeholder */
+.thumb.tinted {
+  background:
+    radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--tint) 9%, transparent), transparent 60%),
+    radial-gradient(90% 80% at 100% 100%, color-mix(in srgb, var(--tint) 6%, transparent), transparent 55%),
+    var(--bg-subtle);
+}
+.flow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-bottom: 18px; /* room for captions */
+  --node: clamp(34px, 10cqw, 56px);
+}
+.flow.is-grouped { --node: clamp(30px, 8.5cqw, 46px); }
+.flow-node {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: var(--node);
+  aspect-ratio: 1;
+  opacity: 0;
+  transform: translateY(10px) scale(0.85);
+  transition: opacity 0.5s var(--ease), transform 0.6s var(--ease);
+  transition-delay: calc(450ms + var(--i) * 160ms);
+}
+.flow-node img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 18%;
+}
+.flow-cap {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(10px, 2.3cqw, 12px);
   font-weight: 500;
+  line-height: 1.2;
   color: var(--text-2);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  padding: 6px 10px;
-  border-radius: 6px;
+  white-space: nowrap;
+}
+.flow-link {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(14px, 4.5cqw, 32px);
+  height: 1.5px;
+  margin: 0 6px;
+  background: color-mix(in srgb, var(--text-3) 45%, transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease);
+  transition-delay: calc(350ms + var(--i) * 160ms);
+}
+.flow-group {
+  display: grid;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+  transition-delay: calc(350ms + var(--i) * 160ms);
+}
+.flow-zone {
+  position: relative;
+  padding: 26px 14px 28px;
+  border: 1px dashed color-mix(in srgb, var(--text-3) 55%, transparent);
+  border-radius: 5px;
+}
+.flow-zone-label {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-size: clamp(9px, 2cqw, 11px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-3);
+}
+.flow-row { display: flex; align-items: center; }
+.flow.is-grouped { padding-bottom: 0; }
+.flow.in :is(.flow-node, .flow-group) { opacity: 1; transform: none; }
+.flow.in .flow-link { transform: scaleX(1); }
+.flow-lead { position: relative; display: flex; align-items: center; }
+.flow-dot {
+  position: absolute;
+  top: calc(50% - 9px);
+  left: 0;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
+}
+.flow-lead .flow-dot { top: 50%; }
+.project-card:hover .flow.in .flow-dot { animation: flow-run 1.3s var(--ease); }
+.project-card:hover .flow.in .flow-lead .flow-dot { animation: flow-stop 0.9s var(--ease) forwards; }
+@keyframes flow-run {
+  0% { left: 0; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+@keyframes flow-stop {
+  0% { left: 0; opacity: 0; }
+  15% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow-node, .flow-group, .flow-link { opacity: 1; transform: none; transition: none; }
+  .project-card:hover .flow-dot { animation: none; }
 }
 
 .project-card:hover .thumb img,
 .project-card:hover .thumb-placeholder { transform: scale(1.025); }
 
-.card-body { padding-top: 18px; }
+.card-body { padding: 18px 4px 0; }
 
-/* 임시 카드 (draft) */
 .project-card.is-draft { cursor: default; }
 .project-card.is-draft .thumb { border-style: dashed; background: transparent; }
 .project-card.is-draft .thumb-placeholder { opacity: 0.5; }
@@ -732,7 +795,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   gap: 16px;
   font-size: 18px;
   font-weight: 650;
-  letter-spacing: -0.01em;
 }
 .card-title .year { font-size: 14px; font-weight: 450; color: var(--text-3); flex-shrink: 0; }
 .card-summary { margin-top: 8px; color: var(--text-2); font-size: 16px; }
@@ -751,7 +813,7 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 .project-card .tag:hover { border-color: var(--line); color: var(--text-2); }
 
 /* ==========================================================
-   Side projects (작은 썸네일 + 가운데 좁은 리스트)
+   Side projects
    ========================================================== */
 
 .side-item:first-child { padding-top: 4px; }
@@ -779,11 +841,13 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   transition: transform 0.35s var(--ease);
 }
 .side-thumb img { width: 60%; height: 60%; object-fit: contain; }
+.side-thumb:has(img.fill) { overflow: hidden; }
+.side-thumb img.fill { width: 100%; height: 100%; object-fit: cover; }
 .side-item:hover .side-thumb { transform: rotate(-4deg) scale(1.04); }
 .side-text { flex: 1; min-width: 0; }
 .side-title { font-weight: 600; }
 .side-desc { font-size: 15px; color: var(--text-2); }
-.side-meta { font-size: 14px; color: var(--text-3); flex-shrink: 0; }
+.side-meta { padding-right: 4px; font-size: 14px; color: var(--text-3); flex-shrink: 0; }
 
 /* ==========================================================
    Experience list
@@ -800,9 +864,9 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   gap: 16px;
 }
 .exp-org { font-size: 18px; font-weight: 600; }
-/* 역할(소속 아래 줄)은 본문 설명보다 작고 옅게 → 제목/역할/설명 3단이 구분됨 */
 .exp-role { margin-top: 2px; font-size: 14px; color: var(--text-3); }
-.exp-period { font-size: 15px; color: var(--text-3); flex-shrink: 0; font-variant-numeric: tabular-nums; }
+#education .exp-role { margin-top: 4px; font-size: 16px; color: var(--text-2); }
+.exp-period { padding-right: 4px; font-size: 15px; color: var(--text-3); flex-shrink: 0; }
 .exp-desc { margin-top: 8px; font-size: 16px; color: var(--text-2); }
 
 .more-link {
@@ -846,7 +910,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   padding: 14px 0;
   border-bottom: 1px solid var(--line);
 }
-/* 아이콘은 두 줄(이름+기관) 글자보다 살짝 크게(48px), 세로 가운데. 사이드 프로젝트 썸네일과 같은 크기 */
 .cert-item { align-items: center; }
 .cert-icon {
   width: 48px;
@@ -862,7 +925,7 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 .cert-text { flex: 1; min-width: 0; }
 .cert-name { font-weight: 550; }
 .cert-issuer { font-size: 15px; color: var(--text-2); }
-.cert-date { font-size: 15px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.cert-date { padding-right: 4px; font-size: 15px; color: var(--text-3); }
 
 /* ==========================================================
    Resume CTA
@@ -884,7 +947,7 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 }
 
 /* ==========================================================
-   Projects page (상세)
+   Projects page
    ========================================================== */
 .filter-bar {
   display: flex;
@@ -905,7 +968,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   color: var(--text-2);
 }
 .filter-btn[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
-/* 메인/사이드는 선택하면 초록 (주제 필터의 검정과 구분) */
 .filter-btn[data-group="type"]:is([data-key="main"], [data-key="side"])[aria-pressed="true"] {
   background: var(--accent-text);
   border-color: var(--accent-text);
@@ -962,11 +1024,10 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   background: var(--text-3);
 }
 .detail-links { display: flex; gap: 8px; margin-top: 24px; }
-.detail-links .btn { height: 38px; font-size: 14px; padding: 0 16px; }
+.detail-links .btn { height: 38px; font-size: 14px; padding: 0 16px; border-radius: 7px; }
 .detail-links .btn-icon { width: 38px; padding: 0; justify-content: center; }
 .detail-links .btn-icon svg { width: 18px; height: 18px; }
 
-/* 왼쪽 썸네일 아래 정보 */
 .detail-side { align-self: start; min-width: 0; }
 .detail-facts {
   display: grid;
@@ -974,11 +1035,12 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   justify-content: start;
   gap: 4px 32px;
   margin: 20px 0 0;
+  padding-left: 4px;
 }
 .detail-facts dt { font-size: 13px; color: var(--text-3); }
 .detail-facts dd { margin: 2px 0 0; font-size: 15px; font-weight: 550; }
 .detail h2 + .tags { margin-top: 14px; }
-.detail-side .detail-links { margin-top: 24px; }
+.detail-side .detail-links { margin-top: 24px; padding-left: 4px; }
 @media (max-width: 520px) {
   .detail-facts { grid-template-columns: 1fr 1fr; }
 }
@@ -1022,7 +1084,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 .pager-link:hover .pager-title { color: var(--accent-text); }
 .detail-title-link:hover { color: var(--accent-text); }
 
-/* 메인 카드: hover하면 썸네일 오른쪽 아래에 "자세히 보기" */
 .thumb-wrap { position: relative; }
 .view-chip {
   position: absolute;
@@ -1035,9 +1096,10 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   height: 36px;
   padding: 0 14px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 6px 16px rgba(0, 0, 0, 0.08);
   color: #141414;
   font-size: 14px;
@@ -1050,8 +1112,7 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 .view-chip svg { width: 15px; height: 15px; transition: transform 0.3s var(--ease); }
 .project-card:is(:hover, :focus-visible) .view-chip { opacity: 1; transform: none; }
 .project-card:hover .view-chip svg { transform: translateX(2px); }
-[data-theme="dark"] .view-chip { background: rgba(23, 23, 26, 0.78); color: #f1f1f1; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4); }
-/* 터치 화면에서는 hover가 없으니 항상 보이게 */
+[data-theme="dark"] .view-chip { background: rgba(23, 23, 26, 0.5); border-color: rgba(255, 255, 255, 0.08); color: #f1f1f1; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4); }
 @media (hover: none) { .view-chip { opacity: 1; transform: none; } }
 
 /* ==========================================================
@@ -1060,7 +1121,7 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 .modal {
   width: min(980px, calc(100% - 32px));
   max-height: calc(100svh - 48px);
-  overflow-y: auto; /* 내용이 길면 모달 안에서 스크롤 */
+  overflow-y: auto;
   overscroll-behavior: contain;
   padding: 0;
   border: 1px solid var(--line);
@@ -1078,7 +1139,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   from { opacity: 0; transform: translateY(12px) scale(0.98); }
 }
 .modal-inner { padding: 0 40px 40px; }
-/* 제목과 버튼은 스크롤해도 위에 붙어 있음 */
 .modal-head {
   position: sticky;
   top: 0;
@@ -1111,7 +1171,7 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.8s var(--ease), transform 0.9s var(--ease), filter 0.8s var(--ease);
-  transition-delay: var(--d, 0ms); /* motion.js가 같이 나타나는 요소끼리 순서대로 넣어줌 */
+  transition-delay: var(--d, 0ms);
 }
 .reveal.in { opacity: 1; transform: none; }
 
@@ -1123,7 +1183,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 
 /* ==========================================================
    Motion (js/motion.js)
-   효과마다 <html>에 fx-이름 클래스가 붙음. 빼려면 motion.js의 FX에서 false로
    ========================================================== */
 :root {
   --glow: rgba(10, 182, 139, 0.14);
@@ -1132,7 +1191,6 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 [data-theme="dark"] { --glow: rgba(79, 224, 182, 0.14); }
 html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 32px); }
 
-/* --- 랜딩 십자 배경 (항상 켜짐). 카드가 반투명이라 카드 뒤로도 흐리게 비침 --- */
 .hero::before,
 .hero::after {
   content: "";
@@ -1155,7 +1213,7 @@ html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 
   --cross-img-glow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 19.5v9M19.5 24h9' stroke='%234fe0b6' stroke-width='1.4'/%3E%3C/svg%3E");
 }
 
-/* --- crossGlow: 커서 주변 십자만 초록으로 --- */
+/* --- crossGlow --- */
 .fx-crossGlow .hero::after {
   background-image: var(--cross-img-glow);
   -webkit-mask-image: radial-gradient(160px circle at var(--hx, -999px) var(--hy, -999px), #000, transparent 75%);
@@ -1165,7 +1223,7 @@ html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 
 }
 .fx-crossGlow .hero.glow::after { opacity: 0.9; }
 
-/* --- progress: 스크롤 진행 바 --- */
+/* --- progress --- */
 .scroll-progress {
   position: fixed;
   top: calc(var(--header-h) - 2px);
@@ -1179,10 +1237,10 @@ html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 
   pointer-events: none;
 }
 
-/* --- blur: 흐렸다가 선명하게 --- */
+/* --- blur --- */
 .fx-blur .reveal:not(.in) { filter: blur(8px); }
 
-/* --- wipe: 큰 제목이 아래 선에서 올라옴 --- */
+/* --- wipe --- */
 .fx-wipe :is(.split-title, .page-title).reveal {
   opacity: 1;
   filter: none;
@@ -1196,7 +1254,7 @@ html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 
   clip-path: inset(-20% -5% -30% -5%);
 }
 
-/* --- eyebrow: 네모가 돌면서 나타나고 자간이 좁혀짐 --- */
+/* --- eyebrow --- */
 .fx-eyebrow .eyebrow.reveal {
   transform: none;
   letter-spacing: 0.32em;
@@ -1207,7 +1265,7 @@ html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 
 .fx-eyebrow .eyebrow::before { transition: transform 0.9s var(--ease) calc(var(--d, 0ms) + 120ms); }
 .fx-eyebrow .eyebrow.reveal:not(.in)::before { transform: rotate(-180deg) scale(0); }
 
-/* --- stagger: 태그가 하나씩 튀어나옴 --- */
+/* --- stagger --- */
 .fx-stagger .reveal .tag {
   transition: opacity 0.5s var(--ease), transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
     border-color 0.2s, color 0.2s;
@@ -1225,7 +1283,7 @@ html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 
 .tag:nth-child(7) { --t: 6; }
 .tag:nth-child(n + 8) { --t: 7; }
 
-/* --- lines: 구분선이 왼쪽에서 그려짐 --- */
+/* --- lines --- */
 .fx-lines :is(.exp-item, .skill-row, .cert-item, .side-item) {
   position: relative;
   border-bottom-color: transparent;
@@ -1244,17 +1302,15 @@ html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 
 }
 .fx-lines :is(.exp-item, .skill-row, .cert-item, .side-item).in::after { transform: none; }
 
-/* 사이드 프로젝트 hover: 제목 색, 글자 살짝 밀림 */
 .side-text { transition: transform 0.35s var(--ease); }
 .side-title { font-size: 18px; transition: color 0.2s; }
 .side-item:hover .side-text { transform: translateX(4px); }
 .side-item:hover .side-title { color: var(--accent-text); }
 
-/* 경험 hover: 기간 숫자 진하게 */
 .exp-period { transition: color 0.2s; }
 .exp-item:hover .exp-period { color: var(--text); }
 
-/* --- cards: 썸네일이 아래에서 열림 + 안쪽은 살짝 줌아웃 --- */
+/* --- cards --- */
 .fx-cards .project-card.reveal .thumb {
   clip-path: inset(100% 0 0 0 round var(--radius));
 }
@@ -1264,19 +1320,18 @@ html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 
 .fx-cards .project-card :is(.thumb img, .thumb-placeholder) { transition: transform 1.1s var(--ease); }
 .fx-cards .project-card.reveal:not(.in) :is(.thumb img, .thumb-placeholder) { transform: scale(1.18); }
 
-/* 썸네일 공통 transition (열림 + 기울기) */
 .thumb {
   transition: clip-path 1.1s var(--ease) var(--d, 0ms), transform 0.6s var(--ease);
 }
 
-/* --- tilt: 마우스 방향으로 기울기 --- */
+/* --- tilt --- */
 .fx-tilt :is(.project-card, .detail) .thumb {
   transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
 }
 
-/* --- spotlight: 마우스 따라오는 빛 --- */
+/* --- spotlight --- */
 .fx-spotlight .resume-cta { position: relative; }
-.fx-spotlight :is(.thumb, .resume-cta)::after {
+.fx-spotlight .resume-cta::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -1287,12 +1342,9 @@ html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 
   opacity: 0;
   transition: opacity 0.4s;
 }
-.fx-spotlight :is(.thumb, .resume-cta).lit::after { opacity: 1; }
+.fx-spotlight .resume-cta.lit::after { opacity: 1; }
 .fx-spotlight .resume-cta > * { position: relative; z-index: 2; }
 
-/* --- ctaFill: 초록이 번지는 버튼 (Projects, Download PDF) ---
-   원이 다 덮은 뒤 버튼 바탕색 자체도 초록으로 바꿈
-   (안 바꾸면 둥근 모서리 가장자리에 원래 검정이 1px 정도 비쳐 보임) */
 .fx-ctaFill .btn-fill {
   overflow: hidden;
   isolation: isolate;
@@ -1318,7 +1370,6 @@ html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 
   z-index: -1;
 }
 .fx-ctaFill .btn-fill:hover::before { transform: scale(1); }
-/* 글자색은 바꾸지 않음 (색 번짐과 글자색 전환이 겹치면 깜박여 보여서) */
 
 .cta-arrow {
   display: inline-flex;
@@ -1334,7 +1385,7 @@ html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 
   100% { transform: translateX(0); }
 }
 
-/* --- hop: 정렬된 아이콘이 통 튐 (translate라 landing.js의 transform과 안 겹침) --- */
+/* --- hop --- */
 .fx-hop .stack-icon.hop { animation: icon-hop 0.7s cubic-bezier(0.3, 0.6, 0.35, 1) both; }
 @keyframes icon-hop {
   0%, 100% { translate: 0 0; }
@@ -1347,5 +1398,4 @@ html:has(.built-banner) { --stick-top: calc(var(--header-h) + var(--banner-h) + 
   .reveal { filter: none; clip-path: none; }
 }
 
-/* 메인은 배너까지 고려해서 앵커 위치 보정 */
 html:has(.built-banner) { scroll-padding-top: calc(var(--header-h) + var(--banner-h) + 16px); }

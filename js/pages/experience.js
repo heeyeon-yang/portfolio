@@ -1,4 +1,3 @@
-// Experience 페이지
 
 function renderPage() {
   document.getElementById("all-experience").innerHTML = EXPERIENCE.map(expItemHTML).join("");

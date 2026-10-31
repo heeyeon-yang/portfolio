@@ -1,36 +1,36 @@
-// 경험 / 학력 / 기술 / 자격증
-// featured: true 인 경험만 메인 페이지에 노출
 
-// TODO: 기간, 설명 전부 실제 내용으로 교체
 const EXPERIENCE = [
   {
     featured: true,
-    org: "kt cloud TECH UP",
-    role: { en: "Cloud Infrastructure Bootcamp", ko: "클라우드 인프라 부트캠프" },
-    period: "2026",
+    roleFirst: true,
+    role: { en: "Cloud Engineering Program, Infrastructure Track", ko: "KT Cloud 클라우드 엔지니어링(인프라) 전문가과정" },
+    org: { en: "KT Cloud TECH UP", ko: "KT Cloud TECH UP 부트캠프" },
+    period: { en: "2026.08 – Present", ko: "2026.08 – 진행 중" },
     desc: {
-      en: "Built and operated AWS infrastructure in team projects, focusing on EKS, RDS, and monitoring.",
-      ko: "팀 프로젝트로 AWS 인프라를 구축하고 운영했습니다. EKS, RDS, 모니터링 중심.",
+      en: "A program on designing, building, and operating cloud infrastructure. Team projects run in stages, covering high availability, hybrid cloud, security, monitoring, and automation with Terraform.",
+      ko: "클라우드 인프라의 설계, 구축, 운영을 다루는 과정입니다. 고가용성, 하이브리드 클라우드, 보안, 모니터링, Terraform 기반 자동화를 주제로 단계별 팀 프로젝트를 진행합니다.",
     },
   },
   {
     featured: true,
-    org: "Undergraduate Research",
-    role: { en: "Research Student", ko: "학부연구생" },
-    period: "20XX – 20XX",
+    roleFirst: true,
+    role: { en: "EFUB Team Lead", ko: "EFUB 팀 리드" },
+    org: { en: "Ewha Womans University Web Development Club", ko: "이화여자대학교 웹 개발 동아리" },
+    period: "2024.03 – 2025.12",
     desc: {
-      en: "Description goes here.",
-      ko: "설명이 들어갈 자리입니다.",
+      en: "Acted as the link between designers and developers across three concurrent projects of 8 to 9 members each, and wrote the shared handoff guide for terms and specifications. Reviewed designs for feasibility before development so issues were caught early.",
+      ko: "팀별 8~9명 규모로 동시에 진행된 프로젝트 3개에서 디자이너와 개발자 사이의 소통을 맡아, 용어와 명세를 통일한 공용 핸드오프 가이드를 작성했습니다. 개발 전에 디자인의 구현 가능성을 검토해 문제를 초기에 바로잡았습니다.",
     },
   },
   {
     featured: false,
-    org: "EFUB",
-    role: { en: "Organizer", ko: "운영진" },
-    period: "20XX – 20XX",
+    roleFirst: true,
+    role: { en: "Undergraduate Research Assistant", ko: "학부연구생" },
+    org: "UX Design & Research Lab",
+    period: "2024.07",
     desc: {
-      en: "Description goes here.",
-      ko: "설명이 들어갈 자리입니다.",
+      en: "Worked on a government-funded healthcare data platform project. Narrowed more than 50 proposed features down to 6 core user scenarios that wearable data could support.",
+      ko: "정부 지원 헬스케어 데이터 플랫폼 과제에 참여했습니다. 제안된 기능 50여 개를 웨어러블 데이터로 구현 가능한 핵심 사용자 시나리오 6개로 정리했습니다.",
     },
   },
 ];
@@ -47,16 +47,13 @@ const EDUCATION = [
   },
 ];
 
-// 메인/Experience 둘 다 이걸 씀
 const SKILLS = [
-  { label: { en: "Cloud", ko: "클라우드" }, items: ["AWS", "EKS", "RDS", "Lambda", "S3", "CloudFront", "Route 53"] },
-  { label: { en: "IaC", ko: "IaC" }, items: ["Terraform", "CloudFormation"] },
-  { label: { en: "Container", ko: "컨테이너" }, items: ["Kubernetes", "Nginx Ingress"] },
-  { label: { en: "Monitoring", ko: "모니터링" }, items: ["CloudWatch"] },
-  { label: { en: "Language / DB", ko: "언어 / DB" }, items: ["Python", "MySQL"] },
+  { label: { en: "Cloud", ko: "클라우드" }, items: ["AWS", "EC2", "S3", "VPC", "IAM", "RDS", "EKS", "Lambda", "CloudWatch"] },
+  { label: { en: "IaC & CI/CD", ko: "IaC & CI/CD" }, items: ["Terraform", "GitHub Actions", "ArgoCD"] },
+  { label: { en: "Container", ko: "컨테이너" }, items: ["Docker", "Kubernetes"] },
+  { label: { en: "Language", ko: "언어" }, items: ["Python", "Bash", "SQL"] },
 ];
 
-// 자격증. date는 취득 연월(YYYY.MM), icon은 발급 기관 로고
 const CERTS = [
   {
     name: "AWS Certified Solutions Architect – Associate",
