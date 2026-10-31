@@ -194,7 +194,7 @@ function thumbHTML(diagram, stack = [], flow = [], tint = "") {
 
 const FLOW_LABELS = {
   route53: "Route 53", elb: "ALB", eks: "EKS", rds: "RDS", kinesis: "Kinesis",
-  dynamodb: "DynamoDB", s3: "S3", lambda: "Lambda", sqs: "SQS", bedrock: "Bedrock", slack: "Slack",
+  dynamodb: "DynamoDB", s3: "S3", lambda: "Lambda", sqs: "SQS", bedrock: "Bedrock", slack: "Slack", cloudfront: "CloudFront",
 };
 
 // A step is "eks", or { icon: "lambda", label: "Worker" }, or a zone group:
