@@ -59,6 +59,10 @@ const UI_TEXT = {
 
   "modal.close": { en: "Close", ko: "닫기" },
   "modal.full": { en: "View full page", ko: "전체 보기" },
+  "ops.title": { en: "Live status", ko: "운영 상태" },
+  "ops.via": { en: "API Gateway → Lambda → DynamoDB", ko: "API Gateway → Lambda → DynamoDB" },
+  "ops.visitors": { en: "Visitors", ko: "방문자 수" },
+  "ops.latency": { en: "API response time", ko: "API 응답 시간" },
   "a11y.menu": { en: "Open menu", ko: "메뉴 열기" },
   "a11y.theme": { en: "Toggle dark mode", ko: "다크 모드 전환" },
   "a11y.lang": { en: "한국어로 보기", ko: "View in English" },

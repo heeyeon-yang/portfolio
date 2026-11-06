@@ -136,6 +136,61 @@ function toggleTheme() {
   try { localStorage.setItem("theme", next); } catch (e) {}
 }
 
+/* ---------- Live stats (API Gateway -> Lambda -> DynamoDB) ---------- */
+
+const STATS_API = "https://eafbnvrbmi.execute-api.ap-northeast-2.amazonaws.com";
+const stats = { visitors: null, latency: null };
+
+async function fetchVisitors(method) {
+  const start = performance.now();
+  const res = await fetch(`${STATS_API}/visitors`, { method });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  stats.visitors = data.visitors;
+  stats.latency = Math.round(performance.now() - start);
+}
+
+// Count one visit per browser session. Reloads and page moves in the same session are not counted again.
+function countVisit() {
+  let counted = false;
+  try { counted = sessionStorage.getItem("visit-counted") === "1"; } catch (e) {}
+  if (counted) return;
+  fetchVisitors("POST")
+    .then(() => { try { sessionStorage.setItem("visit-counted", "1"); } catch (e) {} })
+    .catch(() => {});
+}
+
+function formatStat(value, unit = "") {
+  return value == null ? "–" : value.toLocaleString() + unit;
+}
+
+function opsPanelHTML() {
+  return `
+    <div class="ops-panel" id="ops-panel">
+      <div class="ops-head">
+        <h3><span class="ops-dot" aria-hidden="true"></span>${t("ops.title")}</h3>
+        <span class="ops-via">${t("ops.via")}</span>
+      </div>
+      <dl class="ops-grid">
+        <div><dt>${t("ops.visitors")}</dt><dd data-ops="visitors">${formatStat(stats.visitors)}</dd></div>
+        <div><dt>${t("ops.latency")}</dt><dd data-ops="latency">${formatStat(stats.latency, " ms")}</dd></div>
+      </dl>
+    </div>
+  `;
+}
+
+function updateOpsPanel() {
+  const panel = document.getElementById("ops-panel");
+  if (!panel) return;
+  panel.querySelector('[data-ops="visitors"]').textContent = formatStat(stats.visitors);
+  panel.querySelector('[data-ops="latency"]').textContent = formatStat(stats.latency, " ms");
+}
+
+// Read the current count each time the modal opens, so the response time is measured fresh.
+function refreshOpsPanel() {
+  fetchVisitors("GET").catch(() => {}).finally(updateOpsPanel);
+}
+
 /* ---------- How I built modal ---------- */
 
 function ensureModal() {
@@ -172,6 +227,7 @@ function renderModal() {
         </div>
       </div>
       ${thumbHTML(p.diagram, p.stack, p.flow, p.tint)}
+      ${opsPanelHTML()}
       <div class="modal-sections">
         <p>${pick(p.summary)}</p>
         ${points.length ? `<div><h3>${t("project.highlights")}</h3><ul class="detail-points">${points.map((x) => `<li>${x}</li>`).join("")}</ul></div>` : ""}
@@ -187,6 +243,7 @@ function renderModal() {
 function openBuiltModal() {
   renderModal();
   ensureModal().showModal();
+  refreshOpsPanel();
 }
 
 function thumbHTML(diagram, stack = [], flow = [], tint = "") {
@@ -381,6 +438,7 @@ function observeReveal(root = document) {
 document.addEventListener("DOMContentLoaded", () => {
   document.documentElement.lang = getLang();
   renderHeader();
+  countVisit();
 
   document.addEventListener("click", (e) => {
     if (e.target.closest("[data-open-built]")) openBuiltModal();

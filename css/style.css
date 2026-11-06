@@ -1189,6 +1189,20 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 .modal-sections { display: grid; gap: 20px; margin-top: 28px; }
 .modal-sections h3 { font-size: 16px; font-weight: 650; }
 .modal-sections p { margin-top: 4px; font-size: 16px; color: var(--text-2); }
+.ops-panel {
+  margin-top: 24px;
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-subtle);
+}
+.ops-head { display: flex; align-items: baseline; justify-content: space-between; gap: 4px 12px; flex-wrap: wrap; }
+.ops-head h3 { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 650; }
+.ops-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.ops-via { font-size: 13px; color: var(--text-3); }
+.ops-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 12px 0 0; }
+.ops-grid dt { font-size: 13px; color: var(--text-3); }
+.ops-grid dd { margin: 2px 0 0; font-family: var(--display); font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; }
 @media (max-width: 520px) {
   .modal-inner { padding: 0 20px 24px; }
   .modal-head { padding-top: 20px; }
