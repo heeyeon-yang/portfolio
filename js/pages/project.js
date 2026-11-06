@@ -36,6 +36,9 @@ function renderPage() {
   if (p.links && p.links.github) {
     links.push(`<a class="btn btn-outline" href="${p.links.github}" target="_blank" rel="noopener">${ICONS.github}<span>${t("projects.github")}</span></a>`);
   }
+  if (p.links && p.links.reference) {
+    links.push(`<a class="btn btn-outline" href="${p.links.reference.url}" target="_blank" rel="noopener">${ICONS.globe}<span>${p.links.reference.label}</span></a>`);
+  }
 
   const prev = LIST[i - 1];
   const next = LIST[i + 1];
@@ -59,6 +62,8 @@ function renderPage() {
       ${links.length ? `<div class="detail-links">${links.join("")}</div>` : ""}
     </header>
 
+    ${p.id === HOW_I_BUILT_ID ? opsPanelHTML() : ""}
+
     <div class="project-body">
       ${points.length ? `<section><h2>${t("project.highlights")}</h2><ul class="detail-points">${points.map((x) => `<li>${x}</li>`).join("")}</ul></section>` : ""}
       ${figureAtTop ? `<section>${figure}</section>` : ""}
@@ -70,6 +75,7 @@ function renderPage() {
 
     <nav class="pager">${navLink(prev, "prev")}${navLink(next, "next")}</nav>
   `;
+  if (p.id === HOW_I_BUILT_ID) refreshOpsPanel();
 }
 
 /* ---------- Diagram lightbox ---------- */

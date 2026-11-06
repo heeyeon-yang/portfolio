@@ -138,15 +138,14 @@ function toggleTheme() {
 /* ---------- Live stats (API Gateway -> Lambda -> DynamoDB) ---------- */
 
 const STATS_API = "https://eafbnvrbmi.execute-api.ap-northeast-2.amazonaws.com";
-const stats = { visitors: null, latency: null };
+const stats = { visitors: null, downloads: null };
 
 async function fetchVisitors(method) {
-  const start = performance.now();
   const res = await fetch(`${STATS_API}/visitors`, { method });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   stats.visitors = data.visitors;
-  stats.latency = Math.round(performance.now() - start);
+  if (data.downloads != null) stats.downloads = data.downloads;
 }
 
 // Count one visit per browser session. Reloads and page moves in the same session are not counted again.
@@ -166,14 +165,12 @@ function formatStat(value, unit = "") {
 function opsPanelHTML() {
   return `
     <div class="ops-panel" id="ops-panel">
-      <div class="ops-head">
-        <h3><span class="ops-dot" aria-hidden="true"></span>${t("ops.title")}</h3>
-        <span class="ops-via">${t("ops.via")}</span>
-      </div>
+      <h3><span class="ops-dot" aria-hidden="true"></span>${t("ops.title")}</h3>
       <dl class="ops-grid">
         <div><dt>${t("ops.visitors")}</dt><dd data-ops="visitors">${formatStat(stats.visitors)}</dd></div>
-        <div><dt>${t("ops.latency")}</dt><dd data-ops="latency">${formatStat(stats.latency, " ms")}</dd></div>
+        <div><dt>${t("ops.downloads")}</dt><dd data-ops="downloads">${formatStat(stats.downloads)}</dd></div>
       </dl>
+      <p class="ops-note">${t("ops.note")}</p>
     </div>
   `;
 }
@@ -182,10 +179,10 @@ function updateOpsPanel() {
   const panel = document.getElementById("ops-panel");
   if (!panel) return;
   panel.querySelector('[data-ops="visitors"]').textContent = formatStat(stats.visitors);
-  panel.querySelector('[data-ops="latency"]').textContent = formatStat(stats.latency, " ms");
+  panel.querySelector('[data-ops="downloads"]').textContent = formatStat(stats.downloads);
 }
 
-// Read the current count each time the modal opens, so the response time is measured fresh.
+// Read the current counts each time the panel is shown.
 function refreshOpsPanel() {
   fetchVisitors("GET").catch(() => {}).finally(updateOpsPanel);
 }
@@ -409,7 +406,9 @@ async function downloadResume(btn) {
   try {
     const res = await fetch(`${STATS_API}/resume`, { method: "POST" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const { url } = await res.json();
+    const { url, downloads } = await res.json();
+    stats.downloads = downloads;
+    updateOpsPanel();
     window.location.assign(url);
   } catch (e) {
     label.textContent = t("resume.error");

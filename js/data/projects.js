@@ -260,7 +260,10 @@ const PROJECTS = [
     tint: "#8c4fff",
     flow: ["route53", "cloudfront", "s3"],
     diagram: null,
-    links: { github: "https://github.com/heeyeon-yang/portfolio" },
+    links: {
+      github: "https://github.com/heeyeon-yang/portfolio",
+      reference: { label: "Cloud Resume Challenge", url: "https://cloudresumechallenge.dev/" },
+    },
     sections: [
       {
         heading: { en: "The challenge", ko: "챌린지 소개" },

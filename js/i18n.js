@@ -60,10 +60,13 @@ const UI_TEXT = {
 
   "modal.close": { en: "Close", ko: "닫기" },
   "modal.full": { en: "View full page", ko: "전체 보기" },
-  "ops.title": { en: "Live status", ko: "운영 상태" },
-  "ops.via": { en: "API Gateway → Lambda → DynamoDB", ko: "API Gateway → Lambda → DynamoDB" },
-  "ops.visitors": { en: "Visitors", ko: "방문자 수" },
-  "ops.latency": { en: "API response time", ko: "API 응답 시간" },
+  "ops.title": { en: "Site metrics", ko: "운영 지표" },
+  "ops.visitors": { en: "Visits", ko: "방문 수" },
+  "ops.downloads": { en: "Resume downloads", ko: "이력서 다운로드" },
+  "ops.note": {
+    en: "Visits are counted once per browser session, and downloads each time the button issues a download link. Both counts are stored in DynamoDB and read through API Gateway and Lambda.",
+    ko: "방문은 브라우저 세션당 한 번, 다운로드는 버튼으로 다운로드 링크를 발급받을 때마다 집계합니다. 두 값은 DynamoDB에 저장되며 API Gateway와 Lambda를 통해 조회합니다.",
+  },
   "a11y.menu": { en: "Open menu", ko: "메뉴 열기" },
   "a11y.theme": { en: "Toggle dark mode", ko: "다크 모드 전환" },
   "a11y.lang": { en: "한국어로 보기", ko: "View in English" },
