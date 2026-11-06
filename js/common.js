@@ -155,22 +155,27 @@ function ensureModal() {
 
 function renderModal() {
   const modal = ensureModal();
-  const d = HOW_I_BUILT;
+  const p = PROJECTS.find((x) => x.id === HOW_I_BUILT_ID);
+  if (!p) return;
+  const points = pick(p.points) || [];
+  const sections = p.sections || [];
   modal.innerHTML = `
     <div class="modal-inner">
       <div class="modal-head">
         <div>
           <p class="detail-kind">How I built</p>
-          <h2>${pick(d.title)}</h2>
+          <h2>${pick(p.title)}</h2>
         </div>
         <div class="modal-actions">
-          ${d.projectId ? `<a class="btn btn-outline modal-full" href="project.html?id=${d.projectId}"><span>${t("modal.full")}</span>${ICONS.arrowRight}</a>` : ""}
+          <a class="btn btn-outline modal-full" href="project.html?id=${p.id}"><span>${t("modal.full")}</span>${ICONS.arrowRight}</a>
           <button class="icon-btn" type="button" data-close aria-label="${t("modal.close")}">${ICONS.close}</button>
         </div>
       </div>
-      ${thumbHTML(d.diagram, d.stack)}
+      ${thumbHTML(p.diagram, p.stack, p.flow, p.tint)}
       <div class="modal-sections">
-        ${d.sections
+        <p>${pick(p.summary)}</p>
+        ${points.length ? `<div><h3>${t("project.highlights")}</h3><ul class="detail-points">${points.map((x) => `<li>${x}</li>`).join("")}</ul></div>` : ""}
+        ${sections
           .map((s) => `<div><h3>${pick(s.heading)}</h3><p>${pick(s.body)}</p></div>`)
           .join("")}
       </div>

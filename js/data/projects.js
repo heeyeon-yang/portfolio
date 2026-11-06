@@ -233,7 +233,6 @@ const PROJECTS = [
     year: "2026",
     thumb: "assets/thumbs/cloud-resume.svg",
     thumbFill: true,
-    modal: true,
     title: { en: "Cloud Resume Challenge", ko: "Cloud Resume Challenge" },
     summary: {
       en: "Building this portfolio site on AWS, from static hosting to automated deployment.",
@@ -262,42 +261,38 @@ const PROJECTS = [
     flow: ["route53", "cloudfront", "s3"],
     diagram: null,
     links: { github: "https://github.com/heeyeon-yang/portfolio" },
+    sections: [
+      {
+        heading: { en: "The challenge", ko: "챌린지 소개" },
+        body: {
+          en: "The Cloud Resume Challenge takes a resume from a plain HTML page to a website running on AWS, covering hosting, DNS, infrastructure as code, and CI/CD along the way. I left out the visitor counter that the original challenge uses as its backend feature.",
+          ko: "Cloud Resume Challenge는 이력서를 HTML 페이지에서 시작해 AWS에서 운영되는 웹사이트로 만드는 과제로, 호스팅, DNS, 코드형 인프라, CI/CD를 차례로 다룹니다. 원래 챌린지의 백엔드 기능인 방문자 카운터는 넣지 않았습니다.",
+        },
+      },
+      {
+        heading: { en: "Hosting", ko: "호스팅" },
+        body: {
+          en: "HTML, CSS, and JavaScript files are stored in a private S3 bucket and served only through CloudFront.",
+          ko: "HTML, CSS, JavaScript 파일을 비공개 S3 버킷에 두고 CloudFront를 통해서만 제공합니다.",
+        },
+      },
+      {
+        heading: { en: "Domain and HTTPS", ko: "도메인과 HTTPS" },
+        body: {
+          en: "The domain is managed in Route 53 and points to CloudFront, with an ACM certificate for HTTPS.",
+          ko: "도메인은 Route 53에서 관리하며 CloudFront로 연결하고, HTTPS는 ACM 인증서로 처리합니다.",
+        },
+      },
+      {
+        heading: { en: "Deployment", ko: "배포" },
+        body: {
+          en: "To be added.",
+          ko: "작성 예정",
+        },
+      },
+    ],
   },
 ];
 
-const HOW_I_BUILT = {
-  projectId: "this-site",
-  title: { en: "How I built this site", ko: "이 사이트를 만든 방법" },
-  stack: ["S3", "CloudFront", "Route 53", "ACM"],
-  diagram: null,
-  sections: [
-    {
-      heading: { en: "The challenge", ko: "챌린지 소개" },
-      body: {
-        en: "The Cloud Resume Challenge takes a resume from a plain HTML page to a website running on AWS, covering hosting, DNS, infrastructure as code, and CI/CD along the way. I left out the visitor counter that the original challenge uses as its backend feature.",
-        ko: "Cloud Resume Challenge는 이력서를 HTML 페이지에서 시작해 AWS에서 운영되는 웹사이트로 만드는 과제로, 호스팅, DNS, 코드형 인프라, CI/CD를 차례로 다룹니다. 원래 챌린지의 백엔드 기능인 방문자 카운터는 넣지 않았습니다.",
-      },
-    },
-    {
-      heading: { en: "Hosting", ko: "호스팅" },
-      body: {
-        en: "HTML, CSS, and JavaScript files are stored in a private S3 bucket and served only through CloudFront.",
-        ko: "HTML, CSS, JavaScript 파일을 비공개 S3 버킷에 두고 CloudFront를 통해서만 제공합니다.",
-      },
-    },
-    {
-      heading: { en: "Domain and HTTPS", ko: "도메인과 HTTPS" },
-      body: {
-        en: "The domain is managed in Route 53 and points to CloudFront, with an ACM certificate for HTTPS.",
-        ko: "도메인은 Route 53에서 관리하며 CloudFront로 연결하고, HTTPS는 ACM 인증서로 처리합니다.",
-      },
-    },
-    {
-      heading: { en: "Deployment", ko: "배포" },
-      body: {
-        en: "To be added.",
-        ko: "작성 예정",
-      },
-    },
-  ],
-};
+// The "How I built" modal shows the project with this id.
+const HOW_I_BUILT_ID = "this-site";

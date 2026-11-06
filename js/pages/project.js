@@ -36,9 +36,6 @@ function renderPage() {
   if (p.links && p.links.github) {
     links.push(`<a class="btn btn-outline" href="${p.links.github}" target="_blank" rel="noopener">${ICONS.github}<span>${t("projects.github")}</span></a>`);
   }
-  if (p.modal) {
-    links.push(`<button class="btn btn-outline" type="button" data-open-built><span>${t("projects.details")}</span>${ICONS.arrowRight}</button>`);
-  }
 
   const prev = LIST[i - 1];
   const next = LIST[i + 1];
