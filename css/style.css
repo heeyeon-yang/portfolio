@@ -556,6 +556,7 @@ html.scrolled .built-banner .pill { font-size: 12px; padding: 2px 12px; }
 .btn-outline:hover { border-color: var(--text-3); }
 .btn svg { width: 16px; height: 16px; transition: transform 0.25s var(--ease); }
 .btn:hover svg.down { transform: translateY(2px); }
+.btn[aria-busy="true"] { opacity: 0.6; cursor: progress; }
 .btn:hover svg.right { transform: translateX(2px); }
 
 /* ==========================================================

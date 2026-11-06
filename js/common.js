@@ -2,7 +2,6 @@
 const LINKS = {
   github: "https://github.com/heeyeon-yang",
   linkedin: "https://www.linkedin.com/in/heeyeon-yang",
-  resume: "assets/Resume_Heeyeon_Yang.pdf",
 };
 
 const ICONS = {
@@ -393,11 +392,32 @@ function resumeHTML() {
         <h3 data-i18n="resume.title"></h3>
         <p data-i18n="resume.desc"></p>
       </div>
-      <a class="btn btn-primary btn-fill" href="${LINKS.resume}" download>
+      <button class="btn btn-primary btn-fill" type="button" data-resume-download>
         <span data-i18n="resume.btn"></span>${ICONS.download}
-      </a>
+      </button>
     </div>
   `;
+}
+
+// The PDF sits in a private bucket. The API returns a presigned URL valid for 5 minutes
+// and records the download, so the file has no fixed public link.
+async function downloadResume(btn) {
+  if (btn.disabled) return;
+  const label = btn.querySelector("span");
+  btn.disabled = true;
+  btn.setAttribute("aria-busy", "true");
+  try {
+    const res = await fetch(`${STATS_API}/resume`, { method: "POST" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const { url } = await res.json();
+    window.location.assign(url);
+  } catch (e) {
+    label.textContent = t("resume.error");
+    setTimeout(() => { label.textContent = t("resume.btn"); }, 3000);
+  } finally {
+    btn.disabled = false;
+    btn.removeAttribute("aria-busy");
+  }
 }
 
 /* ---------- Scroll reveal ---------- */
@@ -442,6 +462,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("click", (e) => {
     if (e.target.closest("[data-open-built]")) openBuiltModal();
+    const resumeBtn = e.target.closest("[data-resume-download]");
+    if (resumeBtn) downloadResume(resumeBtn);
   });
 
   document.addEventListener("langchange", () => {

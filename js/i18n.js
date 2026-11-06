@@ -28,6 +28,7 @@ const UI_TEXT = {
   "resume.title": { en: "Resume", ko: "이력서" },
   "resume.desc": { en: "Full resume in PDF.", ko: "전체 이력서를 PDF로 받을 수 있습니다." },
   "resume.btn": { en: "Download PDF", ko: "PDF 다운로드" },
+  "resume.error": { en: "Try again shortly", ko: "잠시 후 다시 시도해 주세요" },
 
   "projects.title": { en: "Projects", ko: "프로젝트" },
   "projects.intro": {
