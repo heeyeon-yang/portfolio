@@ -32,8 +32,7 @@
     band.className = "stack-marquee";
     band.setAttribute("aria-hidden", "true");
     band.innerHTML = `<div class="mq-track">${items}${items}</div>`;
-    const ref = hero.querySelector('.stack-icon img[src$="/aws.svg"]');
-    if (ref) band.style.setProperty("--mq-size", ref.parentElement.getBoundingClientRect().width + "px");
+    setSize();
     hero.appendChild(band);
     place();
 
@@ -51,6 +50,12 @@
 
     requestAnimationFrame(() => hero.classList.add("marquee-on"));
     setTimeout(() => hero.classList.add("marquee-run"), FADE_MS);
+  }
+
+  // landing.js의 stackSize()와 같은 값. 아이콘 실측값은 정렬 애니메이션 도중이면 커져서 쓰지 않는다.
+  function setSize() {
+    if (!band) return;
+    band.style.setProperty("--mq-size", (hero.clientWidth < 600 ? 34 : 44) + "px");
   }
 
   function place() {
@@ -72,7 +77,13 @@
     const go = () => {
       if (done) return;
       done = true;
-      build();
+      if (!document.hidden) return build();
+      // 백그라운드 탭에서는 정렬 애니메이션이 진행되지 않으므로 다시 보일 때 만든다.
+      document.addEventListener("visibilitychange", function onShow() {
+        if (document.hidden) return;
+        document.removeEventListener("visibilitychange", onShow);
+        setTimeout(build, 1500);
+      });
     };
     icons.forEach((el) =>
       el.addEventListener("transitionend", function onEnd(e) {
@@ -94,5 +105,5 @@
     mo.observe(hero, { attributes: true, attributeFilter: ["class"] });
   }
 
-  addEventListener("resize", () => requestAnimationFrame(place));
+  addEventListener("resize", () => requestAnimationFrame(() => { setSize(); place(); }));
 })();
