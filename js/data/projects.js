@@ -3,6 +3,7 @@ const TOPICS = {
   data: { en: "Data pipeline", ko: "데이터 파이프라인" },
   event: { en: "Event-driven", ko: "이벤트 기반 처리" },
   hosting: { en: "Static hosting", ko: "정적 호스팅" },
+  monitoring: { en: "Monitoring", ko: "모니터링" },
 };
 
 const PROJECTS = [
@@ -12,69 +13,143 @@ const PROJECTS = [
     topic: "reliability",
     year: "2026",
     title: {
-      en: "Multi-AZ Failover Validation on EKS",
-      ko: "EKS Multi-AZ 장애 대응 검증",
+      en: "Failure Recovery Under Peak Traffic on EKS Multi-AZ",
+      ko: "트래픽 급증 대비 EKS Multi-AZ 장애 복구 검증",
     },
     summary: {
-      en: "Built an EKS shopping site across two Availability Zones for a high-traffic sale event, and tested whether it stayed available through pod, node, zone, and database failures.",
-      ko: "트래픽이 몰리는 판매 이벤트를 가정해 EKS 기반 쇼핑몰을 두 가용 영역에 구축했습니다. 파드, 노드, 가용 영역, DB 장애 상황에서도 서비스가 유지되는지 검증했습니다.",
+      en: "Set up the Kubernetes deployment and HTTPS entry path so the service survives failures on EKS, then broke pods, nodes, and a whole zone to confirm recovery within 60 seconds.",
+      ko: "EKS에서 서비스가 장애를 견디도록 Kubernetes 배포 설정과 HTTPS 접속 경로를 구성하고, 파드, 노드, 가용 영역 장애를 일으켜 60초 안에 복구되는 것을 확인했습니다.",
     },
     meta: {
       period: "2026.09 – 2026.10",
-      team: { en: "Team of 6", ko: "6인 팀" },
-      role: { en: "Containers & application", ko: "컨테이너, 애플리케이션" },
+      team: { en: "Team project", ko: "팀 프로젝트" },
+      role: { en: "Kubernetes deployment, entry path, app", ko: "Kubernetes 배포, 접속 경로, 서비스 개발" },
     },
     points: {
       en: [
-        "No lost or duplicate orders during a database failover",
-        "Orders back within 21 seconds of the failover, with no app restart",
-        "I built the Kubernetes scaling and recovery setup and the order service",
+        "Recovered on the remaining nodes within 60 seconds after node and zone failures",
+        "No pod restarts during the database failover, after splitting liveness and readiness checks",
+        "HTTPS entry path built with Route 53, ACM, and ALB",
       ],
       ko: [
-        "DB 장애 전환 중 주문 유실과 중복 0건",
-        "장애 전환 후 앱 재시작 없이 21초 안에 주문 재개",
-        "Kubernetes 확장과 장애 복구 설정, 주문 서비스 담당",
+        "노드와 가용 영역 장애 시 60초 안에 남은 노드로 복구",
+        "liveness와 readiness 분리로 DB 장애 전환 중 파드 재시작 0회",
+        "Route 53, ACM, ALB로 HTTPS 접속 경로 구성",
       ],
     },
     sections: [
       {
-        heading: { en: "Overview", ko: "개요" },
+        heading: { en: "Project goal", ko: "프로젝트 목표" },
         body: {
-          en: "A six-person team project that ran a shopping site across two Availability Zones and tested whether it stayed available through pod, node, zone, and database failures under sale-event traffic. A test passed only if every order that received a success response was saved to the database exactly once.",
-          ko: "트래픽이 급증하는 판매 이벤트 상황을 가정해 쇼핑몰을 AWS의 두 가용 영역에 구성하고, 파드, 노드, 가용 영역, DB 장애 상황에서도 서비스가 유지되는지 검증한 6인 팀 프로젝트입니다. 장애 중에 성공 응답을 받은 주문이 모두 DB에 저장되고 중복 기록이 없는 것을 통과 기준으로 삼았습니다.",
+          en: "When orders flood in at an event launch, losing one server or one Availability Zone can make orders fail, disappear, or get saved twice. Splitting a service across two zones doesn't show whether the remaining zone actually takes over, so we tested it by causing real failures. We ran a commerce service on EKS and RDS Multi-AZ across two zones in Seoul and injected pod, node, zone, and database failures while orders kept coming in. To pass, the service had to recover within 60 seconds with no lost or duplicate orders.",
+          ko: "이벤트 오픈처럼 주문이 한꺼번에 몰리는 시점에 서버나 가용 영역 하나가 멈추면, 주문이 실패하거나 유실, 중복될 수 있습니다. 가용 영역을 나눠 두는 것만으로는 남은 쪽이 요청을 이어받는지 알 수 없어, 장애를 실제로 일으켜 확인했습니다. 서울 리전 두 가용 영역에 EKS와 RDS Multi-AZ로 커머스 서비스를 올리고, 주문이 들어오는 중에 파드, 노드, 가용 영역, DB 장애를 주입했습니다. 통과 기준은 60초 안의 서비스 복구와 주문 유실 0건, 중복 0건입니다.",
         },
       },
       {
-        heading: { en: "Architecture", ko: "설계" },
-        body: {
-          en: "The same setup runs in two Availability Zones in the Seoul region, with the network split into entry, application, and database tiers. Requests pass through Route 53 and an Application Load Balancer to EKS nodes in both zones, and the app stores data in RDS for MySQL with Multi-AZ enabled, so a standby in the other zone takes over automatically if the primary fails. With orders coming in continuously, we spiked traffic, terminated pods and nodes, took down every node in one zone, and forced a database failover.",
-          ko: "서울 리전의 두 가용 영역에 같은 구성을 두고, 네트워크를 외부 진입, 애플리케이션, DB 계층으로 분리했습니다. 요청은 Route 53과 ALB를 거쳐 양쪽 영역의 EKS 노드로 분산되고, 앱은 RDS for MySQL Multi-AZ에 데이터를 저장합니다. Primary에 장애가 나면 다른 영역의 Standby가 자동으로 승격됩니다. 이 환경에서 주문이 계속 들어오는 동안 트래픽을 급격히 늘리고, 파드와 노드를 종료하고, 한 가용 영역의 노드를 모두 내리고, DB Primary를 강제로 전환했습니다.",
+        heading: { en: "Key decisions", ko: "주요 판단" },
+        body: { en: "", ko: "" },
+        list: {
+          en: [
+            "ALB with a NodePort. An NLB works at L4 and can't redirect HTTP to HTTPS, and the AWS Load Balancer Controller needed its own install and IAM setup. I put ingress-nginx on a NodePort behind the ALB.",
+            "TLS ends at the ALB. ACM issues and renews the certificate, so the cluster holds no certificates.",
+            "Split health checks. A database outage hits every node the same way, so an ALB check on the database would drop all nodes at once. The ALB checks nodes through /healthz, and the readinessProbe checks the database through /health.",
+          ],
+          ko: [
+            "ALB와 NodePort: NLB는 L4라 HTTP를 HTTPS로 리다이렉트할 수 없고, AWS Load Balancer Controller는 별도 설치와 IAM 구성이 필요했습니다. ALB 뒤에 ingress-nginx를 NodePort로 연결했습니다.",
+            "TLS는 ALB에서 종료: ACM이 인증서 발급과 갱신을 맡아 클러스터에 인증서를 둘 필요가 없습니다.",
+            "헬스체크 분리: DB 장애는 모든 노드에 똑같이 영향을 줍니다. ALB가 DB까지 확인하면 노드가 한꺼번에 빠지므로, ALB는 /healthz로 노드만, readinessProbe는 /health로 DB 연결을 확인합니다.",
+          ],
         },
       },
       {
-        heading: { en: "Results", ko: "결과" },
+        heading: { en: "Networking: HTTPS entry path with Route 53, ACM, and ALB", ko: "네트워크: Route 53, ACM, ALB로 HTTPS 접속 경로 구성" },
+        body: { en: "", ko: "" },
+        list: {
+          en: [
+            "beaver-shop.cloud points to the ALB through a Route 53 A alias record",
+            "The 443 listener ends TLS with an ACM certificate (TLS 1.2 and 1.3), and port 80 redirects to 443 with a 301",
+            "Only requests for the registered host reach the target group; everything else gets a 403",
+            "The target group sends traffic to NodePort 30887 on nodes that pass /healthz, and ingress-nginx routes it to the app Service",
+            "The node group runs 2 to 4 nodes, one in each zone",
+          ],
+          ko: [
+            "Route 53 A 별칭 레코드로 beaver-shop.cloud를 ALB에 연결",
+            "443 리스너에서 ACM 인증서로 TLS 종료(TLS 1.2, 1.3), 80은 443으로 301 리다이렉트",
+            "등록된 호스트만 대상 그룹으로 전달하고 나머지 요청은 403으로 차단",
+            "대상 그룹은 /healthz를 통과한 노드의 NodePort 30887로만 전달, ingress-nginx가 앱 Service로 라우팅",
+            "노드 그룹은 최소 2대, 최대 4대로 두고 가용 영역마다 1대씩 배치",
+          ],
+        },
+        figure: "assets/diagrams/ha-failover-ingress.png",
+      },
+      {
+        heading: { en: "Kubernetes: deployment settings for availability", ko: "Kubernetes: 고가용성 배포 설정" },
         body: {
-          en: "Under the traffic spike, pods scaled from two to four and back to two once the load ended, with every request served. A deleted pod was replaced within seconds. Some requests failed while a node or zone was going down, but the service kept running in the remaining zone. During the database failover, orders resumed within 21 seconds without restarting the app, and checking successful orders against stored orders and stock showed no lost or duplicate orders.",
-          ko: "트래픽이 몰리자 파드가 2개에서 4개로 늘었다가 부하가 끝난 뒤 2개로 돌아왔고, 그동안 요청은 모두 정상 처리됐습니다. 삭제한 파드는 몇 초 만에 새 파드로 대체됐습니다. 노드나 가용 영역이 빠지는 동안 일부 요청은 실패했지만 남은 영역에서 서비스가 계속 동작했습니다. DB 장애 전환 중에는 앱 재시작 없이 21초 만에 주문 처리가 재개됐고, 성공 응답을 받은 주문을 DB의 주문 및 재고와 대조한 결과 유실과 중복은 없었습니다.",
+          en: "The manifests are split into app.yaml, ingress.yaml, hpa.yaml, and pdb.yaml.",
+          ko: "매니페스트는 app.yaml, ingress.yaml, hpa.yaml, pdb.yaml로 나눠 관리했습니다.",
+        },
+        list: {
+          en: [
+            "HPA: 2 to 4 pods at 60% of the CPU request, with a 60-second scale-down window",
+            "Spreading: pod counts across zones and nodes differ by at most one, with a PDB of minAvailable 1",
+            "Rollouts: maxSurge 1 and maxUnavailable 0, and a new pod must stay Ready for 10 seconds before replacing an old one",
+            "Shutdown: a 10-second preStop wait so the ALB and Service stop sending traffic first",
+            "Probes: liveness checks only that the app responds through /live, and readiness also checks the database through /health",
+          ],
+          ko: [
+            "HPA: CPU 요청량 대비 60% 기준으로 파드 2개에서 4개 사이 조절, 축소 안정화 60초",
+            "분산 배치: 가용 영역과 노드 간 파드 수 차이 1 이하, PDB minAvailable 1",
+            "롤링 업데이트: maxSurge 1, maxUnavailable 0, 새 파드가 10초간 Ready를 유지한 뒤 교체",
+            "종료 처리: preStop 10초 대기로 ALB와 Service가 요청 대상을 먼저 바꾸도록 설정",
+            "상태 확인: liveness는 /live로 앱 응답만, readiness는 /health로 DB 연결까지 확인",
+          ],
         },
       },
       {
-        heading: { en: "My role", ko: "역할" },
+        heading: { en: "Application: Flask service for failure testing", ko: "애플리케이션: 장애 검증용 Flask 서비스" },
         body: {
-          en: "I handled containers and the application, and ran the traffic, pod, node, and zone failure tests on Kubernetes. Pods scale between two and four based on CPU usage and are spread across nodes and zones, with at least one kept running during node maintenance. Rollouts bring up a new pod before replacing the old one, and pods get time to finish in-flight requests before shutting down. Health checks are split between whether the app is running and whether it can reach the database, so a brief database outage takes a pod out of rotation instead of restarting it; no pod restarted during the database failover test. I also built the Flask shop, which records both successful and failed orders so the team could verify each test, and set up the HTTPS entry path with Route 53, ACM, and the load balancer.",
-          ko: "컨테이너와 서비스 애플리케이션을 맡아 트래픽, 파드, 노드, 가용 영역 장애 테스트를 Kubernetes에서 진행했습니다. 파드는 CPU 사용률에 따라 2개에서 4개 사이로 조절되도록 하고, 노드와 가용 영역에 고르게 배치해 노드 점검 중에도 최소 한 개가 유지되게 했습니다. 배포 시에는 새 파드가 준비된 뒤 기존 파드를 교체하고, 종료 전에 처리 중인 요청을 마칠 시간을 두었습니다. 상태 확인은 앱 동작 여부와 DB 연결 여부로 나눠, DB 연결이 잠시 끊겨도 파드가 재시작되지 않고 요청 대상에서만 빠지게 했습니다. 실제로 DB 장애 테스트 동안 파드 재시작은 없었습니다. 앱은 성공과 실패 주문을 모두 기록하는 Flask 쇼핑몰로 개발해 팀의 검증 기준으로 썼고, Route 53, ACM, ALB로 HTTPS 진입 경로를 구성했습니다.",
+          en: "I built a Flask app with accounts, products, cart, orders, and stock. It records both successful and failed orders, and the team used those records to check each test for lost or duplicate orders. The page header shows which pod served the request, so a pod switch during a failure is visible right away.",
+          ko: "회원, 상품, 장바구니, 주문, 재고 기능을 갖춘 Flask 앱을 만들었습니다. 성공과 실패 주문을 모두 DB에 기록해, 팀이 장애 후 주문 유실과 중복을 판정하는 기준으로 썼습니다. 화면에는 응답한 파드 이름을 표시해 장애 중 파드 전환을 바로 볼 수 있게 했습니다.",
         },
       },
       {
-        heading: { en: "Issue", ko: "이슈 대응" },
-        body: {
-          en: "During code review, I found that changing the order number in the order page URL showed another user's order, because orders were looked up by number without checking the owner. I changed it to respond only when the signed-in user owns the order, and to return the same response for other users' orders and nonexistent ones so it doesn't reveal which orders exist.",
-          ko: "코드 리뷰에서 주문 조회 주소의 번호만 바꾸면 다른 사용자의 주문이 조회되는 문제를 발견했습니다. 주문 번호로만 조회하고 소유자를 확인하지 않은 것이 원인이었습니다. 로그인한 사용자가 주문 소유자일 때만 응답하도록 수정하고, 다른 사용자의 주문과 존재하지 않는 주문에는 같은 응답을 돌려줘 주문 존재 여부도 드러나지 않게 했습니다.",
+        heading: { en: "Results", ko: "검증 결과" },
+        body: { en: "", ko: "" },
+        list: {
+          en: [
+            "Traffic spike: pods scaled from 2 to 4 and back to 2, with no probe failures",
+            "Pod failure: all 88 requests succeeded while pods were deleted",
+            "Node failure: recovered in 59 seconds, with no failed requests after recovery",
+            "Zone failure: recovered in the remaining zone in 50 seconds, with no failed requests after recovery",
+            "Database failure: no pod restarts during the failover, and no lost or duplicate orders",
+          ],
+          ko: [
+            "트래픽 급증: 파드 2개에서 4개로 확장 후 2개로 복귀, probe 실패 없음",
+            "파드 장애: 파드 삭제 중 요청 88건 모두 성공",
+            "노드 장애: 59초 만에 복구, 복구 후 요청 실패 0건",
+            "가용 영역 장애: 50초 만에 남은 영역에서 복구, 복구 후 요청 실패 0건",
+            "DB 장애: 전환 중 파드 재시작 0회, 주문 유실과 중복 0건",
+          ],
+        },
+        figure: "assets/diagrams/ha-failover-hpa.png",
+      },
+      {
+        heading: { en: "Next steps", ko: "개선 방안" },
+        body: { en: "", ko: "" },
+        list: {
+          en: [
+            "ingress-nginx reached end of maintenance in March 2026, so the next step is a Gateway API controller or the AWS Load Balancer Controller. With the AWS Load Balancer Controller, the ALB targets pod IPs directly and the NodePort hop goes away.",
+            "Shorter health check intervals and thresholds on the target group would cut recovery time after a node failure.",
+          ],
+          ko: [
+            "ingress-nginx는 2026년 3월 유지보수가 종료되어 Gateway API 기반 컨트롤러나 AWS Load Balancer Controller로 옮길 계획입니다. AWS Load Balancer Controller를 쓰면 ALB가 파드 IP를 바로 대상으로 삼아 NodePort 단계가 빠집니다.",
+            "대상 그룹의 헬스체크 간격과 임계값을 줄이면 노드 장애 시 복구 시간을 더 줄일 수 있습니다.",
+          ],
         },
       },
     ],
-    tags: ["EKS", "RDS Multi-AZ", "ALB", "Route 53"],
-    stack: ["EKS", "RDS", "ALB", "Route 53", "ACM"],
+    tags: ["Kubernetes", "EKS", "ALB", "RDS Multi-AZ"],
+    stack: ["EKS", "Kubernetes", "ALB", "Route 53", "RDS"],
     tint: "#8c4fff",
     flow: ["route53", "elb", { zones: ["AZ a", "AZ c"], steps: ["eks", "rds"] }],
     diagram: null,
@@ -225,6 +300,115 @@ const PROJECTS = [
     tags: [],
     stack: [],
     diagram: null,
+  },
+  {
+    id: "hackathon-monitoring",
+    type: "side",
+    topic: "monitoring",
+    year: "2026",
+    thumb: "assets/icons/stack/grafana.svg",
+    title: {
+      en: "NAT Redundancy and Unified Monitoring for a Hybrid Setup",
+      ko: "하이브리드 인프라 NAT 이중화와 모니터링 통합",
+    },
+    summary: {
+      en: "Brought AWS and on-premises metrics into one Prometheus and connected Grafana alerts to email, in a three-day hackathon on another team's hybrid infrastructure.",
+      ko: "AWS와 온프레미스 지표를 Prometheus 하나로 모으고 Grafana 알림을 메일로 연결했습니다. 다른 팀의 하이브리드 인프라를 고객사로 정해 3일간 진행한 해커톤입니다.",
+    },
+    meta: {
+      period: "2026.11",
+      team: { en: "Hackathon team", ko: "해커톤 팀" },
+      role: { en: "Monitoring", ko: "모니터링" },
+    },
+    points: {
+      en: [
+        "Metrics split between CloudWatch and Prometheus brought into a single Prometheus",
+        "Grafana alert at a 5xx rate over 5%, delivered by email and confirmed by injecting HTTP 500 errors",
+      ],
+      ko: [
+        "CloudWatch와 Prometheus 두 곳에서 받던 지표를 Prometheus 하나로 통합",
+        "5xx 비율 5% 초과 시 Grafana 알림을 메일로 전달, HTTP 500 에러 주입으로 동작 확인",
+      ],
+    },
+    sections: [
+      {
+        heading: { en: "Project goal", ko: "프로젝트 목표" },
+        body: {
+          en: "The client ran a sign-up service on AWS and on-premises k3s, connected over WireGuard, with traffic peaking at deadlines. Both Availability Zones shared one NAT instance, and metrics were split between CloudWatch for AWS and Prometheus for on-premises. After meeting the client team, we set two requirements: keep outbound traffic working if one NAT fails, and see all metrics in one place. Their spend was already $49.52 against a $30 monthly budget, so added cost had to stay small.",
+          ko: "고객사는 접수 마감 때 트래픽이 몰리는 서비스를 AWS와 온프레미스 k3s에 나눠 운영하고 WireGuard로 연결한 구성이었습니다. 두 가용 영역이 NAT Instance 1대를 같이 썼고, 지표는 AWS가 CloudWatch, 온프레미스가 Prometheus로 나뉘어 있었습니다. 담당자 미팅을 거쳐 NAT 1대가 멈춰도 외부 통신이 유지될 것, 모든 지표를 한 곳에서 볼 수 있을 것을 요구사항으로 정했습니다. 월 예산 30달러에 실사용이 이미 49.52달러여서 추가 비용은 최소로 잡았습니다.",
+        },
+      },
+      {
+        heading: { en: "Key decisions", ko: "주요 판단" },
+        body: { en: "", ko: "" },
+        list: {
+          en: [
+            "Prometheus as the single collector. CloudWatch would have needed an agent on every on-premises server and a charge per custom metric. The client already ran Prometheus on-premises, so I had it collect AWS metrics too.",
+            "Istio and Kiali to find the failing service. Prometheus alone showed only totals. Istio sidecars report requests, errors, and latency between services without changing the app.",
+          ],
+          ko: [
+            "수집은 Prometheus 하나로: CloudWatch로 옮기면 온프레미스 서버마다 에이전트가 필요하고 커스텀 지표마다 요금이 붙습니다. 고객사가 이미 쓰던 Prometheus로 AWS 지표까지 수집했습니다.",
+            "장애 위치는 Istio와 Kiali로: Prometheus 지표만으로는 총량만 보였습니다. Istio 사이드카는 앱을 고치지 않고 서비스 간 요청량, 에러, 지연 시간을 수집합니다.",
+          ],
+        },
+      },
+      {
+        heading: { en: "Monitoring: metrics and dashboards in Prometheus and Grafana", ko: "모니터링: Prometheus와 Grafana로 지표 통합" },
+        body: { en: "", ko: "" },
+        list: {
+          en: [
+            "Prometheus and Grafana on a t3.medium in a private subnet, pulling on-premises metrics over WireGuard",
+            "Node Exporter Full dashboard for CPU, memory, disk, and network",
+            "Istio Mesh Dashboard for request rate, success rate, 5xx, and P50 to P99 latency per service",
+            "A Kiali link at the top of the dashboard that opens the service graph, colored by state",
+          ],
+          ko: [
+            "Prometheus와 Grafana를 프라이빗 서브넷의 t3.medium 1대에 두고 온프레미스 지표는 WireGuard로 수집",
+            "Node Exporter Full 대시보드로 CPU, 메모리, 디스크, 네트워크 확인",
+            "Istio Mesh Dashboard로 서비스별 요청량, 성공률, 5xx, P50에서 P99까지의 응답 시간 확인",
+            "대시보드 상단 Kiali 링크로 상태별 색상이 표시된 서비스 호출 그래프로 이동",
+          ],
+        },
+        figure: "assets/diagrams/hackathon-dashboard.png",
+      },
+      {
+        heading: { en: "Alerting: from Grafana to email", ko: "알림: Grafana에서 메일까지" },
+        body: {
+          en: "Alert rules moved from CloudWatch to Grafana to sit next to the metrics. The Istio-High-5xx-Error-Rate rule fires when 5xx responses pass 5% of requests over one minute, and the alert reaches email through API Gateway, Lambda, and SNS. The Lambda and SNS were already in the client's account.",
+          ko: "알림 규칙을 CloudWatch에서 Grafana로 옮겨 지표와 같은 곳에서 관리하게 했습니다. Istio-High-5xx-Error-Rate 규칙은 1분간 5xx 응답 비율이 5%를 넘으면 발생하고, API Gateway, Lambda, SNS를 거쳐 메일로 전달됩니다. Lambda와 SNS는 고객사가 쓰던 것을 그대로 활용했습니다.",
+        },
+        figure: "assets/diagrams/hackathon-alert.png",
+      },
+      {
+        heading: { en: "Results", ko: "검증 결과" },
+        body: { en: "", ko: "" },
+        list: {
+          en: [
+            "After injecting HTTP 500 errors, the 5xx rate rose to about 15.5%; the alert moved from Pending to Firing past 5% and the email arrived",
+            "Metric collection went from two systems to one Prometheus",
+          ],
+          ko: [
+            "HTTP 500 에러 주입 후 5xx 비율이 약 15.5%까지 상승, 5%를 넘자 알림이 Pending에서 Firing으로 바뀌고 메일 수신",
+            "지표 수집처를 CloudWatch와 Prometheus 두 곳에서 Prometheus 한 곳으로 통합",
+          ],
+        },
+        figure: "assets/diagrams/hackathon-architecture.png",
+      },
+      {
+        heading: { en: "Next steps", ko: "개선 방안" },
+        body: {
+          en: "Collection, dashboards, and alerts run on one monitoring instance. The operations plan includes an AMI backup and rebuild procedure, and putting the instance in an Auto Scaling group with a minimum of 1 would bring it back automatically.",
+          ko: "수집, 대시보드, 알림이 모니터링 EC2 1대에서 동작합니다. 운영 방안에 AMI 백업과 재구축 절차를 넣었고, 이 인스턴스를 최소 1대인 Auto Scaling 그룹으로 묶으면 서버가 멈춰도 자동으로 다시 뜨게 할 수 있습니다.",
+        },
+      },
+    ],
+    tags: ["Prometheus", "Grafana", "Istio", "Kiali"],
+    stack: ["Prometheus", "Grafana", "Lambda", "SNS"],
+    tint: "#e6522c",
+    flow: [{ icon: "prometheus", label: "Prometheus" }, { icon: "grafana", label: "Grafana" }, { icon: "lambda", label: "Alert" }],
+    diagram: null,
+    figure: null,
+    links: {},
   },
   {
     id: "this-site",

@@ -11,6 +11,11 @@ document.addEventListener("click", (e) => {
   }
 });
 
+// A section can carry its own image; it is dropped if the file is missing.
+function sectionFigure(src, alt) {
+  return `<figure class="project-figure"><button class="figure-open" type="button" data-zoom="${src}" aria-label="${alt}"><img src="${src}" alt="${alt}" loading="lazy" onerror="this.closest('figure').remove()"></button></figure>`;
+}
+
 function renderPage() {
   const root = document.getElementById("project-root");
   const i = LIST.findIndex((p) => p.id === projectId);
@@ -68,7 +73,7 @@ function renderPage() {
       ${points.length ? `<section><h2>${t("project.highlights")}</h2><ul class="detail-points">${points.map((x) => `<li>${x}</li>`).join("")}</ul></section>` : ""}
       ${figureAtTop ? `<section>${figure}</section>` : ""}
       ${sections
-        .map((s) => `<section><h2>${pick(s.heading)}</h2><p>${pick(s.body)}</p>${s === figureAfter ? figure : ""}</section>`)
+        .map((s) => `<section><h2>${pick(s.heading)}</h2>${pick(s.body) ? `<p>${pick(s.body)}</p>` : ""}${s.list ? `<ul class="detail-points">${pick(s.list).map((x) => `<li>${x}</li>`).join("")}</ul>` : ""}${s.figure ? sectionFigure(s.figure, pick(s.heading)) : ""}${s === figureAfter ? figure : ""}</section>`)
         .join("")}
       ${sections.length ? "" : `<p class="empty-note">${t("project.writeup")}</p>`}
     </div>

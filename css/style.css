@@ -1540,3 +1540,10 @@ html:has(.built-banner) { scroll-padding-top: calc(var(--header-h) + var(--banne
   .lightbox { width: calc(100vw - 16px); }
   .lightbox-body img { width: 880px; max-width: none; }
 }
+
+/* Project page: one body size and roomier lines for long write-ups */
+.project-summary,
+.project-body p,
+.project-body .detail-points li { font-size: 17px; line-height: 1.8; }
+.project-body .detail-points { gap: 10px; margin-top: 12px; }
+.project-body p + .detail-points { margin-top: 14px; }
